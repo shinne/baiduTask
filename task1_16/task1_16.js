@@ -17,9 +17,9 @@ function addAqiData() {
 	var sCity = document.getElementById("aqi-city-input").value;
 	var sValue = document.getElementById("aqi-value-input").value;
 	//匹配中英文字符
-	var reCity = /^\s*[\u4e00-\u9fa5_a-zA-Z]+\s*$/gi;
+	var reCity = /^\s*[\u4e00-\u9fa5_a-zA-Z]+\s*$/g;
 	//匹配数字
-	var reValue = /-?\d+/gi;
+	var reValue = /-?\d+/g;
 	if(!reCity.test(sCity)){
 		alert("城市名输入不正确，请重新输入！");
 		return;
@@ -29,17 +29,22 @@ function addAqiData() {
 		return;
 	}
 	//将前后的空格去掉
-	var sCity = sCity.replace(/(^\s*) | (\s*$)/g,'');
+	sCity = sCity.replace(/(^\s*) | (\s*$)/g,'');
 	sValue = sValue.replace(/(^\s*) | (\s*$)/g,'');
-	console.log(sCity);
-	console.log(sValue);
-
+	aqiData[sCity] = sValue;
+	console.log(aqiData);
 }
 
 /**
  * 渲染aqi-table表格
  */
 function renderAqiList() {
+	var oAqiTable = document.getElementById('aqi-table');
+	var oTableHTML = '<tr><td>城市</td><td>空气质量</td><td>操作</td></tr>';
+	for(var k in aqiData){
+		oTableHTML += '<tr><td>' + k + '</td><td>' +  aqiData[k] + '</td><td><button>删除</button></td></tr>';
+	}
+	oAqiTable.innerHTML = oTableHTML;
 
 }
 
@@ -58,8 +63,20 @@ function addBtnHandle() {
  */
 function delBtnHandle() {
   // do sth.
-
-  renderAqiList();
+  var oAqiTable = document.getElementById('aqi-table');
+  //此处使用事件委托机制
+  oAqiTable.onclick = function(ev){
+  	var oEvent = ev || window.event ; 
+  	var oTarget = oEvent.target;
+  	console.log(oTarget);
+  	if(oTarget.tagName === 'BUTTON'){
+  		var oTr = oTarget.parentNode.parentNode;
+  		//删除aqiData中对应的键值对
+  		delete aqiData[oTr.children[0].innerHTML];
+  		//删除button对应的行
+  		oAqiTable.deleteRow(oTr.rowIndex);
+  	}
+  }
 }
 
 function init() {
@@ -69,6 +86,7 @@ function init() {
   oBtn.onclick = function(){
       addBtnHandle();
   }
+  delBtnHandle();
   // 想办法给aqi-table中的所有删除按钮绑定事件，触发delBtnHandle函数
 
 }
