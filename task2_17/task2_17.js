@@ -18,6 +18,7 @@ function getDateStr(dat) {
   d = d < 10 ? '0' + d : d;
   return y + '-' + m + '-' + d;
 }
+
 function randomBuildData(seed) {
   var returnData = {};
   var dat = new Date("2016-01-01");
@@ -27,6 +28,7 @@ function randomBuildData(seed) {
     returnData[datStr] = Math.ceil(Math.random() * seed);
     dat.setDate(dat.getDate() + 1);
   }
+  console.log(returnData);
   return returnData;
 }
 
@@ -102,7 +104,24 @@ function initCitySelector() {
  */
 function initAqiChartData() {
   // 将原始的源数据处理成图表需要的数据格式
-  // 处理好的数据存到 chartData 中
+  // 处理好的数据存到 chartData中
+  var week = {};
+  var month = {};
+  for(var cityKey in aqiSourceData){
+    var city = aqiSourceData[cityKey];
+    for(var timeKey in city){
+      var aTime = timeKey.split('-');
+      week[city] = {};
+      month[city] = {};
+      var sConclusionWeek = '第' + aTime[1] + '月第' + Math.ceil(aTime[2]/7) + '周';
+      var sConclusionMonth = '第' + aTime[1] + '月';
+      var k = parseInt(city[timeKey])
+      week[city][sConclusionWeek] += k;
+      month[city][sConclusionMonth] += k;
+      console.log(month[city][sConclusionMonth]);
+     /* console.log(month[city]);*/
+    }
+  }
 }
 
 /**
