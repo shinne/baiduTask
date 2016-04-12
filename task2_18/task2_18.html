@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		ul{
+			list-style:none; 
+			padding-left: 0;
+		}
+		ul li{
+			display: inline-block;
+			background-color: red;
+			height: 30px;
+			font-size: 1.4em;
+			color: white;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body>
+
+	<form>
+		<input type="text">
+		<button class="left_in">左侧入</button>
+		<button class="right_in">右侧入</button>
+		<button class="left_out">左侧出</button>
+		<button class="right_out">右侧出</button>
+	</form>
+	<ul class="text_ul">
+		<!-- li>sdf </li>
+		<li>df</li> -->
+	</ul>
+	<script>
+		var oUl = document.getElementsByClassName("text_ul")[0];
+		aButton = document.getElementsByTagName("button");
+
+		aButton[0].onclick = function() {
+			var sText = document.getElementsByTagName("input")[0].value;
+			console.log(sText);
+			if(sText == ""){
+				alert("请在输入框中输入数据！");
+				
+			}
+			else{
+				var aLi = document.getElementsByTagName("li");
+				var oLi = document.createElement("li");
+				oLi.innerHTML = sText;
+				if(aLi.length == 0){
+					oUl.appendChild(oLi);
+					
+				}
+				else{
+					oUl.insertBefore(oLi,aLi[0]);
+				}
+			}
+			return false;
+		}
+
+		aButton[1].onclick = function(){
+			var sText = document.getElementsByTagName("input")[0].value;
+			console.log(sText);
+			if(sText == ""){
+				alert("请在输入框中输入数据！");
+				
+			}
+			else{
+				var aLi = document.getElementsByTagName("li");
+				var oLi = document.createElement("li");
+				oLi.innerHTML = sText;
+					oUl.appendChild(oLi);
+
+			}
+			return false;
+		}
+
+		aButton[2].onclick = function(){
+			var sText = document.getElementsByTagName("input")[0].value;
+			console.log(sText);
+			var aLi = oUl.getElementsByTagName("li");
+			if(aLi.length > 0){
+				oUl.removeChild(aLi[0]);
+			}
+
+			return false;
+		}
+
+		aButton[3].onclick = function(){
+			var sText = document.getElementsByTagName("input")[0].value;
+			console.log(sText);
+			var aLi = oUl.getElementsByTagName("li");
+			if(aLi.length > 0){
+				oUl.removeChild(aLi[aLi.length-1]);
+			}
+			
+			return false;
+		}
+
+
+
+
+	</script>
+</body>
+</html>

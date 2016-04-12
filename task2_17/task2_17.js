@@ -28,7 +28,7 @@ function randomBuildData(seed) {
     returnData[datStr] = Math.ceil(Math.random() * seed);
     dat.setDate(dat.getDate() + 1);
   }
-  console.log(returnData);
+ /* console.log(returnData);*/
   return returnData;
 }
 
@@ -109,17 +109,35 @@ function initAqiChartData() {
   var month = {};
   for(var cityKey in aqiSourceData){
     var city = aqiSourceData[cityKey];
+    week[city] = {};
+    month[city] = {};
     for(var timeKey in city){
       var aTime = timeKey.split('-');
-      week[city] = {};
-      month[city] = {};
+      
+     /* console.log(aTime[1] + "m");*/
       var sConclusionWeek = '第' + aTime[1] + '月第' + Math.ceil(aTime[2]/7) + '周';
       var sConclusionMonth = '第' + aTime[1] + '月';
       var k = parseInt(city[timeKey])
+     /* console.log(week[city][sConclusionWeek] + "week");*/
+      if(week[city][sConclusionWeek] == undefined){
+        /*console.log(week[city][sConclusionWeek]);*/
+        week[city][sConclusionWeek] = 0;
+        /* console.log(week[city][sConclusionWeek]);*/
+      }
+
       week[city][sConclusionWeek] += k;
+      if(month[city][sConclusionMonth] == undefined){
+        month[city][sConclusionMonth] = 0;
+      }
+
       month[city][sConclusionMonth] += k;
-      console.log(month[city][sConclusionMonth]);
-     /* console.log(month[city]);*/
+    }
+    for(var item in month){
+        console.log(item);
+        for(var i in month[item]){
+          console.log(i  + "  " + month[item][i]);
+        }
+      
     }
   }
 }
