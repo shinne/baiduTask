@@ -20,7 +20,7 @@
 			color: white;
 			margin-right: 6px;
 			position: relative;
-			width: 14px;
+			padding: 4px 6px;
 		}
 		form{
 			display: inline-block;
@@ -37,7 +37,8 @@
 		<button id="right_in">右侧入</button>
 		<button id="left_out">左侧出</button>
 		<button id="right_out">右侧出</button>
-		<button id="sort">排序</button>
+		<input type="text">
+		<button id="search">搜索</button>
 	</form>
 	<ul class="text_ul">
 	</ul>
@@ -62,22 +63,22 @@
 				alert("数字已经超出60个，请删除一些");
 				return false;
 			}
-			
-			var digit = parseInt(s);
-			if(digit > 10  && digit < 100){
-				return true;
-			}
-			else{
-				alert("请在10-100！");	
+			return true;	
+		}
+
+		function searchValidate(s){
+			//当输入无效时
+			if(s == ""){
+				alert("请在搜索框中输入数据！");	
 				return false;
 			}
-			
+			return true;
 		}
 
 		function left_in_fn(sText) {
 			var result = isRightDigit(sText);
 			if(result){
-				data.unshift(sText);	
+				left_array_in(data,sText);
 			}
 			render(oUl,data);
 		}
@@ -85,7 +86,7 @@
 		function right_in_fn(sText){
 			var result = isRightDigit(sText);
 			if(result){
-				data.push(sText);	
+				right_array_in(data,sText);
 			}
 			render(oUl,data);
 		}
@@ -101,14 +102,13 @@
 		}
 
 
-		function sort_fn(){
+		function search_fn(re){
 			//利用迭代器对数组进行从小到大的排序
-			function smallToBig(num1,num2){
-				return parseInt(num1) - parseInt(num2);
+			var result = searchValidate(re);
+			if(result){
+				render(oUl,data,re);
+
 			}
-			data.sort(smallToBig);
-			console.log(data);
-			render(oSortUl,data);
 		}
 
 
@@ -117,6 +117,7 @@
 		oButtons.onclick = function(e){
 			var oEvent = e || window.event;
 			var sText = document.getElementsByTagName("input")[0].value;
+			var regText = document.getElementsByTagName("input")[1].value;
 			//通过id来判断调用那个函数
 			switch(oEvent.target.id){
 				case "left_in":
@@ -134,25 +135,53 @@
 				case "right_out":
 								right_out_fn();
 								break;
-				case "sort":    sort_fn();
+				case "search":  search_fn(regText);
 								break;
 			}
 			return false;
 		}
 
 		//每次的数据都存储在array当中，进行dom渲染
-		function render(oParent,array){
-			var oFragment = document.createDocumentFragment();
-			
-			for(var i in array){
-				var e = document.createElement("li");
-				e.style.height = (parseInt(array[i])*1.5) + "px";
-				e.title = array[i];
-				oFragment.appendChild(e);
+		function render(oParent,array,reg){
+			if(reg){
+				console.log(reg);
+				var re = new RegExp(reg,'gi');
+				var oFragment = document.createDocumentFragment();
+				for(var i in array){
+					var e = document.createElement("li");
+					e.innerHTML = array[i];
+					if(re.test(array[i])){
+						console.log("yellow");
+						e.style.background = "silver";
+					}
+					oFragment.appendChild(e);
+				}
 			}
-			console.log(oFragment);
+			else{
+				var oFragment = document.createDocumentFragment();
+				for(var i in array){
+					var e = document.createElement("li");
+					e.innerHTML = array[i];
+					oFragment.appendChild(e);
+				}
+			}
+			
 			oParent.innerHTML = "";
 			oParent.appendChild(oFragment);
+		}
+		
+		function right_array_in(data,s){
+			var array = s.split(",");
+			for(var i in array){
+				data.push(array[i]);
+			}
+		}
+
+		function left_array_in(data,s){
+			var array = s.split(",");
+			for(var i = array.length-1 ; i >= 0 ;i--){
+				data.unshift(array[i]);
+			}
 		}
 		
 
