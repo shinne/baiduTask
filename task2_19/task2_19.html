@@ -7,14 +7,20 @@
 		ul{
 			list-style:none; 
 			padding-left: 0;
+			height: 150px;
+			display: block;
+			text-align: center;
+			vertical-align: bottom;
 		}
 		ul li{
 			display: inline-block;
 			background-color: red;
-			height: 30px;
 			font-size: 1.4em;
+			height: 30px;
 			color: white;
-			margin-right: 10px;
+			margin-right: 6px;
+			position: relative;
+			width: 14px;
 		}
 		form{
 			display: inline-block;
@@ -31,33 +37,56 @@
 		<button id="right_in">右侧入</button>
 		<button id="left_out">左侧出</button>
 		<button id="right_out">右侧出</button>
+		<button id="sort">排序</button>
 	</form>
 	<ul class="text_ul">
 	</ul>
+
+	<ul class="sort_ul">
+	</ul>
 	<script>
-		var oUl = document.getElementsByClassName("text_ul")[0];
+		var oUl = document.getElementsByTagName("ul")[0];
+		var oSortUl = document.getElementsByTagName("ul")[1];
 		aButton = document.getElementsByTagName("button");
 		//数据存储在data当中
 		var data = [];
 
-		function left_in_fn(sText) {
-			if(sText == ""){
+		function isRightDigit(s){
+			//当输入无效时
+			if(s == ""){
 				alert("请在输入框中输入数据！");	
+				return false;
+			}
+			//当输入>60个时
+			if(data.length == 60){
+				alert("数字已经超出60个，请删除一些");
+				return false;
+			}
+			var digit = parseInt(s);
+			if(digit > 10  && digit < 100){
+				return true;
 			}
 			else{
-				data.unshift(sText);
-				render(oUl,data);
+				alert("请在10-100！");	
+				return false;
 			}
+			
+		}
+
+		function left_in_fn(sText) {
+			var result = isRightDigit(sText);
+			if(result){
+				data.unshift(sText);	
+			}
+			render(oUl,data);
 		}
 
 		function right_in_fn(sText){
-			if(sText == ""){
-				alert("请在输入框中输入数据！");	
+			var result = isRightDigit(sText);
+			if(result){
+				data.push(sText);	
 			}
-			else{
-				data.push(sText);
-				render(oUl,data);
-			}
+			render(oUl,data);
 		}
 
 		function left_out_fn(){
@@ -71,24 +100,40 @@
 		}
 
 
+		function sort_fn(){
+			//利用迭代器对数组进行从小到大的排序
+			function smallToBig(num1,num2){
+				return parseInt(num1) - parseInt(num2);
+			}
+			data.sort(smallToBig);
+			console.log(data);
+			render(oSortUl,data);
+		}
+
+
 		//事件委托机制给button加click事件
 		var oButtons = document.getElementsByTagName("form")[1];
 		oButtons.onclick = function(e){
 			var oEvent = e || window.event;
 			var sText = document.getElementsByTagName("input")[0].value;
-			console.log(sText);
-			console.log(oEvent.target.id);
+			//通过id来判断调用那个函数
 			switch(oEvent.target.id){
-				case "left_in":left_in_fn(sText);
+				case "left_in":
+								left_in_fn(sText);
 								break;
 
-				case "right_in":right_in_fn(sText);
+				case "right_in":
+								right_in_fn(sText);
 								break;
 
-				case "left_out":left_out_fn();
+				case "left_out":
+								left_out_fn();
 								break;
 
-				case "right_out":right_out_fn();
+				case "right_out":
+								right_out_fn();
+								break;
+				case "sort":    sort_fn();
 								break;
 			}
 			return false;
@@ -100,7 +145,8 @@
 			
 			for(var i in array){
 				var e = document.createElement("li");
-				e.innerHTML = array[i];
+				e.style.height = (parseInt(array[i])*1.5) + "px";
+				e.title = array[i];
 				oFragment.appendChild(e);
 			}
 			console.log(oFragment);
