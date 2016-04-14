@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		ul{
+			list-style:none; 
+			padding-left: 0;
+			height: 150px;
+			display: block;
+			text-align: center;
+			vertical-align: bottom;
+		}
+		ul li{
+			display: inline-block;
+			background-color: red;
+			font-size: 1.4em;
+			height: 30px;
+			color: white;
+			margin-right: 6px;
+			position: relative;
+			padding: 4px 6px;
+		}
+
+		ul li:hover{
+			background-color: silver;
+		}
+		form{
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+
+	<form>
+		<input type="text" class="text-input" placeholder="请用space输入">
+	</form>
+
+	<ul class="text_ul">
+	</ul>
+
+	
+	<textarea name="" id="" cols="30" rows="10" placeholder="请用','将数据分割开来"></textarea>
+	<button class="hobby">输入</button>
+	<ul class="hobby_ul">
+	</ul>
+	<script>
+		var oUl = document.getElementsByTagName("ul")[0];
+		var oSortUl = document.getElementsByTagName("ul")[1];
+		var aButton = document.getElementsByTagName("button");
+		var oInput = document.getElementsByClassName("text-input")[0];
+		var oHobbyUl = document.getElementsByClassName("hobby_ul")[0];
+		var oHobbyBtn = document.getElementsByClassName("hobby")[0];
+		var hobby = [];
+		//数据存储在data当中
+		var data = [];
+
+		//查找需要删除的li的index,好在对应的data中进行删除
+		function getIndex(oParent,type,oChild){
+			var aLi = oParent.getElementsByTagName(type);
+			for(var i = 0 ; i < aLi.length ; i++){
+				if(aLi[i] == oChild){
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		//当鼠标移动到li时，增加删除2个字，并且点击时删除
+		oUl.onmouseover = function(e){
+			var oEvent = e || window.event;
+			if(oEvent.target.nodeName == "LI"){
+				console.log(oEvent.target);
+				oEvent.target.innerHTML = "删除" + oEvent.target.innerHTML;
+
+				oEvent.target.onclick = function(e){
+					var index = getIndex(oUl,"li",this);
+					//获取此li的index，在data中删除后再次渲染dom
+					data.splice(index,1);
+					render(oUl,data);
+				}
+				oEvent.target.onmouseout = function(e){
+				this.innerHTML = this.innerHTML.substring(2);
+				oEvent.target.onmouseout = null;
+				}
+			}
+			
+		}
+
+		//判断插入的形式
+		function isRightDigit(data,s){
+			if(data.length == 10){
+				data = data.slice(1);
+				console.log(data);
+				return true;
+			}
+			return true;	
+		}
+
+		//插入数据的函数
+		function right_in_fn(oUl,data,sText,oInput,repeat){
+			var result = isRightDigit(data,sText);
+			
+			if(repeat){
+				if(result){
+				right_array_in(data,sText);
+				}
+				data = repeat_fn(data);
+			}
+			else{
+				data.push(sText);
+			}
+			render(oUl,data);
+			oInput.value = "";
+			return false;
+		}
+
+		//用这种算法进行清楚重复的数据，时间复杂度为O(n)
+		function repeat_fn(data){
+			var result = {};
+			for(var i in data){
+				result[data[i]]++;
+			}
+			data = [];
+			for(var i in result){
+				data.push(i);
+			}
+			return data;
+		}
+		
+		//tagInput的键盘事件监听
+		oInput.onkeyup = function(e){
+			var oEvent = e || window.event;
+			console.log(oEvent.keyCode);
+			var sText = document.getElementsByTagName("input")[0].value;
+			console.log(sText + "ddfdsfd");
+			sText = sText.trim();
+			if(sText == ""){
+				alert("请输入数据");
+			}
+			if(oEvent.keyCode == 32){
+				right_in_fn(oUl,data,sText,oInput,false);
+			}
+		}
+
+		//爱好添加
+		oHobbyBtn.onclick = function(){
+			var sTextArea = document.getElementsByTagName("textarea")[0];
+			var sText = sTextArea.value;
+			if(sText == ""){
+				alert("请输入数据");
+			}
+			right_in_fn(oHobbyUl,hobby,sText,sTextArea,true);
+		}
+
+
+		//每次的数据都存储在array当中，进行dom渲染
+		function render(oParent,array,reg){
+			if(reg){
+				console.log(reg);
+				var re = new RegExp(reg,'gi');
+				var oFragment = document.createDocumentFragment();
+				for(var i in array){
+					var e = document.createElement("li");
+					e.innerHTML = array[i];
+					if(re.test(array[i])){
+						console.log("yellow");
+						e.style.background = "silver";
+					}
+					oFragment.appendChild(e);
+				}
+			}
+			else{
+				var oFragment = document.createDocumentFragment();
+				for(var i in array){
+					var e = document.createElement("li");
+					e.innerHTML = array[i];
+					oFragment.appendChild(e);
+				}
+			}
+			
+			oParent.innerHTML = "";
+			oParent.appendChild(oFragment);
+		}
+		
+
+		function right_array_in(data,s){
+			console.log(s);
+			var array = s.split(",");
+			for(var i in array){
+				data.push(array[i]);
+			}
+		}
+
+
+
+	</script>
+</body>
+</html>
