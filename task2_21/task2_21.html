@@ -78,7 +78,7 @@
 					var index = getIndex(oUl,"li",this);
 					//获取此li的index，在data中删除后再次渲染dom
 					data.splice(index,1);
-					render(oUl,data);
+					oUl.removeChild(this);
 				}
 				oEvent.target.onmouseout = function(e){
 				this.innerHTML = this.innerHTML.substring(2);
