@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+
+		*{
+			padding: 0px;
+			margin:0px;
+			background-color: white;
+		} 
+		body{
+			height: 100%;
+			width: 100%;
+			border:none;
+		}
+		.border{
+			border: 1px solid black;
+		}
+
+		.root-wrapper{
+			height: 260px;
+			width: 700px;
+			position: relative;
+			margin:auto;
+			left: 0px;
+			top: 100px;
+			bottom: 0px;
+			background-color: white;
+		}
+
+		.left-wrapper{
+			position: absolute;
+			height: 80%;
+			width: 40%;
+			top: 10%;
+			left: 7%;
+			background-color: white;
+
+		}
+
+	    .right-wrapper{
+			position: absolute;
+			height: 80%;
+			width: 40%;
+			top: 10%;
+			left: 53%;
+			background-color: white;
+		}
+
+		.first{
+			z-index: 2;
+		}
+
+		.second{
+			z-index: 3;
+		}
+
+		.third{
+			z-index: 4;
+		}	
+
+		.buttons-wrapper{
+			position: absolute;
+			height: 40px;
+			width: 300px;
+			margin:auto;
+			left: 0px;
+			right: 0px;
+			top: 60px;
+		}
+
+		button{
+			height: 30px;
+			width: 80px;
+			margin-right: 20px;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="buttons-wrapper">
+		<button type="button">先序</Buton>
+		<button type="button">中序</buton>
+		<button type="button">后序</buton>
+	</div>
+	
+	<div class="root-wrapper border">
+		<div class="first left-wrapper border">
+			<div class="second left-wrapper border">
+				<div class="third left-wrapper border"></div>
+				<div class="third right-wrapper border"></div>
+			</div>
+			<div class="second right-wrapper border">
+				<div class="third left-wrapper border"></div>
+				<div class="third right-wrapper border"></div>
+			</div>
+		</div>
+		<div class="first right-wrapper border">
+			<div class="second left-wrapper border">
+				<div class="third left-wrapper border"></div>
+				<div class="third right-wrapper border"></div>
+			</div>
+			<div class="second right-wrapper border">
+				<div class="third left-wrapper border"></div>
+				<div class="third right-wrapper border"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		window.onload = function() {
+			
+			//定义node节点
+			function Node(data,left,right){
+				this.data = data;
+				this.left = left;
+				this.right = right;
+			}
+
+			//定义一棵树
+			function Tree(){
+				this.root = null;
+			}
+
+			//该方法是将输入的dom根节点以及其下面的所有字节点整合成一棵树
+			Tree.prototype.domToTree = function(root,data){
+				if(root == null){
+					var n = new Node(data,null,null);
+					this.root = n;
+					root = this.root;
+				}
+				if(data.children.length > 0){
+					root.left = new Node(data.children[0],null,null);
+					root.right = new Node(data.children[1],null,null);
+				}
+				else{
+					return;
+				}
+
+				arguments.callee(root.left,root.left.data);
+				arguments.callee(root.right,root.right.data);
+			}
+
+			//中序遍历这棵树
+			function inorder(root){
+				if(root != null){
+					inorder(root.left);
+				    displayTree.push(root.data);
+				    inorder(root.right);
+				}  
+			}
+
+			//先序遍历这棵树
+			function preorder(root){
+				if(root != null){
+					displayTree.push(root.data);
+					preorder(root.left);
+				    preorder(root.right);
+				}  
+			}
+
+			//后序遍历这棵树
+			function postorder(root){
+				if(root != null){
+					postorder(root.left);
+				    postorder(root.right);
+				    displayTree.push(root.data);
+				}  
+			} 
+
+			//使用settimeout变换颜色
+			function changeColor(tree){
+				console.log(0);
+				if(tree.length == 0){
+					console.log(0);
+					return;
+				}
+				console.log(i);
+				tree[i].style.backgroundColor = "yellow";
+				timer = setTimeout(function(){
+					tree[i].style.backgroundColor = "white";
+					i++;
+					if(i >= tree.length){
+						clearTimeout(timer);
+					}
+					else{
+						changeColor(displayTree);
+					}
+				},800);
+			}
+
+
+			var displayTree = [];
+			var i = 0;
+			var rootNode = document.getElementsByClassName('root-wrapper')[0];
+			var aButtons = document.getElementsByTagName("button");
+			var timer = null;
+				
+			//建立一棵树
+			var tree = new Tree();
+			//将dom转换成一棵树
+			tree.domToTree(null,rootNode);
+
+			aButtons[0].onclick = function(){
+				//如果其他序列正在运行，则清空timer
+				if(timer){
+					
+					clearTimeout(timer);
+					//同时将当时yellow转为white
+					displayTree[i].style.backgroundColor = "white";
+				}				
+				displayTree = [];
+				preorder(tree.root);
+				i = 0;
+				changeColor(displayTree);
+			}
+
+			aButtons[1].onclick = function(){
+				//如果其他序列正在运行，则清空timer
+				if(timer){
+					clearTimeout(timer);
+					//同时将当时yellow转为white
+					displayTree[i].style.backgroundColor = "white";
+				}
+				displayTree = [];
+				inorder(tree.root);
+				i = 0;
+				changeColor(displayTree);
+			}
+
+			aButtons[2].onclick = function(){
+				//如果其他序列正在运行，则清空timer
+				if(timer){			
+					clearTimeout(timer);
+					//同时将当时yellow转为white
+					displayTree[i].style.backgroundColor = "white";
+				}
+				displayTree = [];
+				postorder(tree.root);
+				i = 0;
+				changeColor(displayTree);
+			}	
+
+		}
+
+	</script>
+</body>
+</html>
