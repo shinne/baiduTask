@@ -172,18 +172,17 @@
 
 			//使用settimeout变换颜色
 			function changeColor(tree){
-				console.log(0);
 				if(tree.length == 0){
-					console.log(0);
 					return;
 				}
-				console.log(i);
 				tree[i].style.backgroundColor = "yellow";
 				timer = setTimeout(function(){
 					tree[i].style.backgroundColor = "white";
 					i++;
 					if(i >= tree.length){
 						clearTimeout(timer);
+						//将定时器清空，以防下一次开启的时候回有displayTree[i].style.backgroundColor = "white";
+						timer = null;
 					}
 					else{
 						changeColor(displayTree);
