@@ -120,28 +120,23 @@
 			}
 
 			//定义一棵树
-			function Tree(){
-				this.root = null;
+			function Tree(root){
+				this.root = root;
 			}
 
 			//该方法是将输入的dom根节点以及其下面的所有字节点整合成一棵树
-			Tree.prototype.domToTree = function(root,data){
-				if(root == null){
-					var n = new Node(data,null,null);
-					this.root = n;
-					root = this.root;
-				}
-				if(data.children.length > 0){
-					root.left = new Node(data.children[0],null,null);
-					root.right = new Node(data.children[1],null,null);
+			Tree.prototype.domToTree = function(n){
+				if(n.data.children.length>0){
+					n.left = new Node(n.data.children[0],null,null);
+					n.right = new Node(n.data.children[1],null,null);
 				}
 				else{
 					return;
 				}
+				arguments.callee(n.left);
+				arguments.callee(n.right);
+				}
 
-				arguments.callee(root.left,root.left.data);
-				arguments.callee(root.right,root.right.data);
-			}
 
 			//中序遍历这棵树
 			function inorder(root){
@@ -197,10 +192,13 @@
 			var aButtons = document.getElementsByTagName("button");
 			var timer = null;
 				
-			//建立一棵树
-			var tree = new Tree();
+			//建立根节点
+			var treeRoot = new Node(rootNode,null,null);
+			//建立以跟节点为root的一棵树一棵树
+			var tree = new Tree(treeRoot);
 			//将dom转换成一棵树
-			tree.domToTree(null,rootNode);
+			tree.domToTree(treeRoot);
+			console.log(tree);
 
 			aButtons[0].onclick = function(){
 				//如果其他序列正在运行，则清空timer
