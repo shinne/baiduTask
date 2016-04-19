@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+
+		*{
+			padding: 0px;
+			margin:0px;
+			background-color: white;
+		} 
+		body{
+			height: 100%;
+			width: 100%;
+			border:none;
+		}
+
+		div.border{
+			float: left;
+			border: 1px solid black;
+			height:100%;
+		 	width:auto;
+		 	top: 0px;
+		 	bottom: 0px;
+		 	display: inline-block;
+		 	margin-right: 2px;
+		 	margin-left: 2px;
+		 	margin-top: 5%; 
+		}
+
+		div.root-wrapper{
+			height: auto;
+			/* width: 700px; */
+			width: auto;
+			position: relative;
+			margin:auto;
+			left: 0px;
+			top: 100px;
+			bottom: 0px;
+			background-color: white;
+			padding: 20px;
+			
+		}
+
+		div.first{
+			width: 400px;
+			height: 280px;
+			padding: 10px;
+			float: left;
+		}
+
+		div.second{
+			width: 120px;
+			height: 200px;
+			float: left;
+		}
+
+		div.third{
+			width: 20px;
+			height: 160px;
+			float: left;
+		}
+
+		.buttons-wrapper{
+			position: absolute;
+			height: 40px;
+			width: 500px;
+			margin:auto;
+			left: 0px;
+			right: 0px;
+			top: 60px;
+		}
+
+		button{
+			height: 24px;
+			width: 50px;
+			margin-right: 20px;
+		}
+	</style>
+</head>
+<bo border dy>
+	<div class="buttons-wrapper">
+		<input type="text" id="search">
+		<button type="button">先序</Buton>
+		<button type="button">中序</buton>
+		<button type="button">后序</buton>
+	</div>
+	
+	<div class=" border root-wrapper">A
+		<div class="first border">C
+			<div class="second border">D
+				<div class="third border">U</div>
+				<div class="third border">M</div>
+				<div class="third border">P</div>
+			</div>
+			<div class="second border">Q
+				<div class="third border">W</div>
+				<div class="third border">Y</div>
+			</div>
+			<div class="second border">G
+				<div class="third border">J</div>
+			</div>
+		</div>
+
+		<div class="first border">V
+			<div class="second border">XT
+				<div class="third border">L</div>
+				<div class="third border">IR</div>	
+			</div>
+			<div class="second border">R
+				<div class="third border">E</div>
+			</div>
+			<div class="second border">T
+				<div class="third border">BD</div>
+				<div class="third border">F</div>
+			</div>
+		</div>
+
+		<div class="first border">H
+			<div class="second border">K
+				<div class="third border">N</div>
+				
+			</div>
+			<div class="second border">O
+				<div class="third border">S</div>
+				<div class="third border">Z</div>
+				<div class="third border">AM</div>
+			</div>
+			<div class="second border">
+				<div class="third border">AZ</div>
+				<div class="third border">UI</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		window.onload = function() {
+			
+			//定义node节点
+			function Node(data){
+				this.data = data;
+				this.children = [];
+			}
+
+			//定义一棵树
+			function Tree(root){
+				this.root = root;
+			}
+
+			//该方法是将输入的dom根节点以及其下面的所有字节点整合成一棵树
+			Tree.prototype.domToTree = function(n){
+				if(n.data.children.length>0){
+					/*n.left = new Node(n.data.children[0],null,null);
+					n.right = new Node(n.data.children[1],null,null);*/
+					for(var i = 0 ; i < n.data.children.length ; i++){
+						console.log(n.data.children[i]);
+						n.children[i] = new Node(n.data.children[i],null);
+					}
+				}
+				else{
+					return;
+				}
+				for(var i = 0 ;i < n.children.length ; i++){
+					arguments.callee(n.children[i]);
+				}	
+			}
+
+
+			//中序遍历这棵树
+			function inorder(root){
+				for(var i = 0 ; i < root.children.length ; i ++){
+					inorder(root.children[i]);
+				}
+				displayTree.push(root.data);
+			}
+
+			//先序遍历这棵树
+			function preorder(root){
+				displayTree.push(root.data);
+				for(var i = 0 ; i < root.children.length ; i ++){
+					preorder(root.children[i]);
+				}
+			}
+
+
+			//后序遍历这棵树
+			function postorder(root){
+				for(var i = 0 ; i < root.children.length ; i ++){
+					postorder(root.children[i]);
+				}
+				displayTree.push(root.data);
+			} 
+
+			//使用settimeout变换颜色
+			function changeColor(tree,s){
+				if(tree.length == 0){
+					alert("查找结点失败！");
+					return;
+				}
+				tree[i].style.backgroundColor = "yellow";
+				console.log("nodeValue");
+				console.log(tree[i].childNodes[0].nodeValue);
+				if(s == tree[i].childNodes[0].nodeValue.trim()){
+						
+					tree[i].style.backgroundColor = "green";
+					clearTimeout(timer);
+					return;
+				}
+
+				timer = setTimeout(function(){
+					tree[i].style.backgroundColor = "white";
+					i++;
+					if(i >= tree.length){
+						clearTimeout(timer);
+						//将定时器清空，以防下一次开启的时候回有displayTree[i].style.backgroundColor = "white";
+						timer = null;
+					}
+					else{
+						changeColor(displayTree,s);
+					}
+				},800);
+			}
+
+
+			var displayTree = [];
+			var i = 0;
+			var rootNode = document.getElementsByClassName('root-wrapper')[0];
+			var aButtons = document.getElementsByTagName("button");
+			var timer = null;
+				
+			//建立根节点
+			var treeRoot = new Node(rootNode,null,null);
+			//建立以跟节点为root的一棵树一棵树
+			var tree = new Tree(treeRoot);
+			//将dom转换成一棵树
+			tree.domToTree(treeRoot);
+			aButtons[0].onclick = function(){
+				var s = document.getElementById("search").value;
+				//如果其他序列正在运行，则清空timer
+				if(timer){
+					
+					clearTimeout(timer);
+					//同时将当时yellow转为white
+					displayTree[i].style.backgroundColor = "white";
+				}				
+				displayTree = [];
+				preorder(tree.root);
+				i = 0;
+				changeColor(displayTree,s);
+			}
+
+			aButtons[1].onclick = function(){
+				var s = document.getElementById("search").value;
+				//如果其他序列正在运行，则清空timer
+				if(timer){
+					clearTimeout(timer);
+					//同时将当时yellow转为white
+					displayTree[i].style.backgroundColor = "white";
+				}
+				displayTree = [];
+				inorder(tree.root);
+				i = 0;
+				changeColor(displayTree,s);
+			}
+
+			aButtons[2].onclick = function(){
+				var s = document.getElementById("search").value;
+				//如果其他序列正在运行，则清空timer
+				if(timer){			
+					clearTimeout(timer);
+					//同时将当时yellow转为white
+					displayTree[i].style.backgroundColor = "white";
+				}
+				displayTree = [];
+				postorder(tree.root);
+				i = 0;
+				changeColor(displayTree,s);
+			}	
+		}
+
+	</script>
+</body>
+</html>
