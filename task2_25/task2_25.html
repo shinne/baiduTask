@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+
+		*{
+			padding: 0px;
+			margin:0px;
+			background-color: white;
+		} 
+		body{
+			height: 100%;
+			width: 100%;
+			border:none;
+		}
+
+		div.border{
+			position: relative;
+			border: 1px solid black;
+		 	width:auto;
+		 	top: 0px;
+		 	bottom: 0px;
+		 	margin-right: 2px;
+		 	margin-left: 2px;
+		 	margin-top: 5px;
+		}
+
+		div.root-wrapper{
+			height: auto;
+			/* width: 700px; */
+			width: auto;
+			position: relative;
+			margin:auto;
+			left: 0px;
+			top: 100px;
+			bottom: 0px;
+			background-color: white;
+			padding: 20px;
+			
+		}
+
+		div.first{
+			width: auto;
+			height: auto;
+			padding: 12px;
+
+
+		}
+
+		div.second{
+			width: auto;
+			padding: 12px;
+			display:none;
+		}
+
+		div.third{
+			width: auto;
+			padding: 12px;
+			display:none;
+		}
+
+		div.fourth{
+			width: auto;
+			padding: 12px;
+			display:none;
+		}
+
+		.buttons-wrapper{
+			position: absolute;
+			height: 40px;
+			width: 800px;
+			margin:auto;
+			left: 0px;
+			right: 0px;
+			top: 60px;
+		}
+
+		button{
+			height: 24px;
+			width: 60px;
+			margin-right: 20px;
+		}
+
+		button.toggle{
+			position: absolute;
+			right: 20px;
+			height: 24px;
+			top: 4px;
+			background-color: green;
+			color: white;
+		}
+	</style>
+</head>
+	<div class="buttons-wrapper">
+		<input type="text" id="search">
+		<button type="button">先序查询</button>
+		<button type="button">中序查询</button>
+		<button type="button">删除</button>
+		<input type="text" id="add">
+		<button type="button">添加</button>
+	</div>
+	
+	<div class=" border root-wrapper">A
+		<div class="first border">C 
+			<button type="button" class="toggle">展开</button>
+			<div class="second border">D
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">U</div>
+				<div class="third border">M</div>
+				<div class="third border">P</div>
+			</div>
+			<div class="second border">Q
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">W</div>
+				<div class="third border">Y</div>
+			</div>
+			<div class="second border">G
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">J</div>
+			</div>
+		</div>
+
+		<div class="first border">V
+			<button type="button" class="toggle">展开</button>
+			<div class="second border">XT
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">L</div>
+				<div class="third border">IR</div>	
+			</div>
+			<div class="second border">R
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">E</div>
+			</div>
+			<div class="second border">T
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">BD</div>
+				<div class="third border">F</div>
+			</div>
+		</div>
+
+		<div class="first border">H
+			<button type="button" class="toggle">展开</button>
+			<div class="second border">K
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">N</div>
+				
+			</div>
+			<div class="second border">O
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">S</div>
+				<div class="third border">Z</div>
+				<div class="third border">AM</div>
+			</div>
+			<div class="second border">
+				<button type="button" class="toggle">展开</button>
+				<div class="third border">AZ</div>
+				<div class="third border">UI</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		window.onload = function() {
+			
+			var oCurrent = null;
+			var aToggleBtn = document.getElementsByClassName(".toggle");
+			//定义node节点
+			function Node(data){
+				this.data = data;
+				this.children = [];
+			}
+
+			//定义一棵树
+			function Tree(root){
+				this.root = root;
+			}
+
+			//该方法是将输入的dom根节点以及其下面的所有字节点整合成一棵树
+			Tree.prototype.domToTree = function(n){
+				if(n.data.children.length>0){
+					/*n.left = new Node(n.data.children[0],null,null);
+					n.right = new Node(n.data.children[1],null,null);*/
+				/*	var aButton = n.data.getElementsByTagName("button");
+					if(aButton.length >0){
+						aButton[0].parentNode.removeChild(aButton[0]);
+					}*/
+
+					for(var i = 0 ; i < n.data.children.length ; i++){
+						if(n.data.children[i].nodeName == "BUTTON"){
+							continue;
+						}
+						n.children[i-1] = new Node(n.data.children[i],null);
+					}
+				}
+				else{
+					return;
+				}
+				for(var i = 0 ;i < n.children.length ; i++){
+					arguments.callee(n.children[i]);
+				}	
+			}
+
+
+			//中序遍历这棵树
+			function inorder(root){
+				for(var i = 0 ; i < root.children.length ; i ++){
+					inorder(root.children[i]);
+				}
+				displayTree.push(root.data);
+			}
+
+			//先序遍历这棵树
+			function preorder(root){
+				displayTree.push(root.data);
+				for(var i = 0 ; i < root.children.length ; i ++){
+					preorder(root.children[i]);
+				}
+			}
+
+
+			//后序遍历这棵树
+			function postorder(root){
+				for(var i = 0 ; i < root.children.length ; i ++){
+					postorder(root.children[i]);
+				}
+				displayTree.push(root.data);
+			} 
+
+			//使用settimeout变换颜色
+			function changeColor(tree,s){
+				if(tree.length == 0){
+					alert("查找结点失败！");
+					return;
+				}
+				tree[i].style.backgroundColor = "yellow";
+				if(s == tree[i].childNodes[0].nodeValue.trim()){
+						
+					tree[i].style.backgroundColor = "green";
+					clearTimeout(timer);
+					return;
+				}
+
+				timer = setTimeout(function(){
+					tree[i].style.backgroundColor = "white";
+					i++;
+					if(i >= tree.length){
+						clearTimeout(timer);
+						//将定时器清空，以防下一次开启的时候回有displayTree[i].style.backgroundColor = "white";
+						timer = null;
+					}
+					else{
+						changeColor(displayTree,s);
+					}
+				},800);
+			}
+
+
+			var displayTree = [];
+			var i = 0;
+			var rootNode = document.getElementsByClassName('root-wrapper')[0];
+			var aButtons = document.getElementsByTagName("button");
+			var timer = null;
+				
+			//建立根节点
+			var treeRoot = new Node(rootNode,null,null);
+			//建立以跟节点为root的一棵树一棵树
+			var tree = new Tree(treeRoot);
+			//将dom转换成一棵树
+			tree.domToTree(treeRoot);
+			aButtons[0].onclick = function(){
+				var s = document.getElementById("search").value;
+				if(!s){
+					alert("请输入需要查询的内容");
+					return;
+				}
+				//如果其他序列正在运行，则清空timer
+				if(timer){
+					
+					clearTimeout(timer);
+					//同时将当时yellow转为white
+					displayTree[i].style.backgroundColor = "white";
+				}				
+				displayTree = [];
+				preorder(tree.root);
+				i = 0;
+				changeColor(displayTree,s);
+			}
+
+			aButtons[1].onclick = function(){
+				var s = document.getElementById("search").value;
+				if(!s){
+					alert("请输入需要查询的内容");
+					return;
+				}
+				//如果其他序列正在运行，则清空timer
+				if(timer){
+					clearTimeout(timer);
+					//同时将当时yellow转为white
+					displayTree[i].style.backgroundColor = "white";
+				}
+				displayTree = [];
+				inorder(tree.root);
+				i = 0;
+				changeColor(displayTree,s);
+			}
+
+			aButtons[2].onclick = function(){
+				console.log(oCurrent);
+				if(!oCurrent){
+					alert("没有选中节点")
+				}
+				else{
+					var cf = confirm("你确定删除该节点吗?");
+					if(cf){
+						oCurrent.parentNode.removeChild(oCurrent);
+						tree.domToTree(treeRoot);
+					}
+					return;
+				}
+			}	
+
+			aButtons[3].onclick = function(){
+				var s = document.getElementById("add").value;
+				console.log(oCurrent);
+				if(!oCurrent){
+					alert("没有选中节点")
+					return;
+				}
+				else if(!s){
+					alert("请输入需要添加的内容");
+					return;
+				}
+				else{
+					var cf = confirm("你确定添加该节点吗?");
+					if(cf){
+						var e = document.createElement("div");
+						e.style.width = "auto";
+						e.style.padding = "12px";
+						e.style.display = "block";
+						e.className = "border";
+						e.innerHTML = s;
+						oCurrent.appendChild(e);
+						tree.domToTree(treeRoot);
+						if(oCurrent.children[0].nodeName != "BUTTON"){
+							var oBtn = document.createElement("button");
+							oBtn.className = "toggle";
+							oBtn.innerHTML = "展开";
+							/*<button type="button" class="toggle">展开</button>*/
+							oCurrent.insertBefore(oBtn,oCurrent.children[0]);
+						}
+					}
+					return;
+				}
+			}
+
+
+			rootNode.onclick = function(e){
+				var oEvent = e || window.event;
+				var oTarget = oEvent.target;
+				oCurrent = oTarget;
+				if(oCurrent.nodeName != "BUTTON"){
+					console.log(oCurrent);
+					clickColor(oCurrent);
+					console.log(oCurrent);
+
+				}
+
+				else if(oCurrent.nodeName == "BUTTON"){
+					var oBtn = oCurrent;
+					var aCurrent = oCurrent.parentNode.children;
+					if(oCurrent.innerHTML == "展开"){
+						for(var i in aCurrent){
+							if(aCurrent[i].nodeName =="DIV"){
+								aCurrent[i].style.display="block";
+							}
+						}
+						oBtn.innerHTML = "隐藏";
+						return;
+					}
+					if(oCurrent.innerHTML == "隐藏"){
+						for(var i in aCurrent){
+							if(aCurrent[i].nodeName =="DIV"){
+								aCurrent[i].style.display="none";
+							}
+						}
+						oBtn.innerHTML = "展开";
+						return;
+					}
+					oCurrent = null;
+				}
+			}
+
+			function clickColor(e){
+				var elements = document.getElementsByTagName('div');
+				for(var i = 0 ; i < elements.length ; i++){
+					elements[i].style.backgroundColor = "white";
+				}
+				e.style.backgroundColor = "silver";
+			}
+		}
+
+	</script>
+</body>
+</html>
