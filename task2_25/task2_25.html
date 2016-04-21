@@ -180,13 +180,6 @@
 			//该方法是将输入的dom根节点以及其下面的所有字节点整合成一棵树
 			Tree.prototype.domToTree = function(n){
 				if(n.data.children.length>0){
-					/*n.left = new Node(n.data.children[0],null,null);
-					n.right = new Node(n.data.children[1],null,null);*/
-				/*	var aButton = n.data.getElementsByTagName("button");
-					if(aButton.length >0){
-						aButton[0].parentNode.removeChild(aButton[0]);
-					}*/
-
 					for(var i = 0 ; i < n.data.children.length ; i++){
 						if(n.data.children[i].nodeName == "BUTTON"){
 							continue;
@@ -239,6 +232,8 @@
 						
 					tree[i].style.backgroundColor = "green";
 					clearTimeout(timer);
+					//寻找到的节点展开显示出来
+					unfold(tree,i);
 					return;
 				}
 
@@ -349,6 +344,7 @@
 							oBtn.innerHTML = "展开";
 							/*<button type="button" class="toggle">展开</button>*/
 							oCurrent.insertBefore(oBtn,oCurrent.children[0]);
+							tree.domToTree(treeRoot);
 						}
 					}
 					return;
@@ -356,7 +352,7 @@
 			}
 
 
-			rootNode.onclick = function(e){
+			rootNode.onclick = function(e,oCurrent){
 				var oEvent = e || window.event;
 				var oTarget = oEvent.target;
 				oCurrent = oTarget;
@@ -398,6 +394,32 @@
 					elements[i].style.backgroundColor = "white";
 				}
 				e.style.backgroundColor = "silver";
+			}
+
+			function unfold(tree,i){
+				var data = tree[i];
+				while(data != rootNode ){
+					if(data.parentNode.children){
+						var array = data.parentNode.children
+						/*var btn = data.parentNode.children[0];
+						if(btn && btn.nodeName == "BUTTON"&& btn.innerHTML=="展开"){
+							
+							btn.parentNode.style.display =="block"
+							btn.innerHTML == "隐藏";
+							
+						}*/
+						for(var i = 0 ; i < array.length ; i++){
+							if(array[i].nodeName == "BUTTON" && array[i].innerHTML=="展开"){	
+								array[i].innerHTML == "隐藏";
+							
+							}
+							else{
+								array[i].style.display = "block";
+							}
+						}
+					}
+					data = data.parentNode;
+				}
 			}
 		}
 
