@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.body-wrapper{
+			position: absolute;
+			margin:auto;
+			height: 200px;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+		}
+
+		.form-box{
+			width: 500px;
+			height: 200px;
+			margin:0 auto;
+			text-align: left;
+		}
+		.input-box{
+			height: 40px;
+			width: 260px;
+			border:1px solid silver;
+			border-radius: 5px;
+		}
+
+		.right-input-box{
+			border:1px solid green;
+		}
+
+		.fault-input-box{
+			border:1px solid red;
+		}
+
+		.validate{
+			height: 40px;
+			width: 80px;
+			border-radius: 5px;
+		}
+
+		.tips{
+			display: block;
+			margin-top: 10px;
+			color:silver;
+			font-weight: 600;
+		}
+
+		.right-tips{
+			color:green;
+		}
+
+		.fault-tips{
+			color: red;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="body-wrapper">
+		<div class="form-box">
+			<input type="text" class="input-box" id="input-box">
+			<button type="button" class="validate" id="validate">验证</button>
+			<span class="tips" id="tips">请输入数据</span>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		window.onload = function(){
+			var oInput = document.getElementById("input-box");
+			var oBtn = document.getElementById("validate");
+			var oTips = document.getElementById("tips");
+			oBtn.onclick = function(){
+				var s = oInput.value;
+				var result = validateFn(s);
+				if(result >= 4 && result <= 16){
+					oInput.className = "input-box right-input-box";
+					oTips.className = "tips right-tips";
+					oTips.innerHTML = "输入字符符合规范";
+				}
+				else{
+					oInput.className = "input-box fault-input-box";
+					oTips.className = "tips fault-tips";
+					oTips.innerHTML = "输入字符不符合规范";
+				}
+
+			};
+
+			//该函数计算input的值的长度
+			function validateFn(string){
+				var s = string.trim();
+				var len = 0;
+				for(var i = 0 ; i < s.length ; i ++){
+					var c = s.charCodeAt(i);
+					if(c >=0 && c<= 128){
+						len++;
+					}
+					else{
+						len += 2;
+					}
+				}
+				return len;
+			}
+
+		}
+
+	</script>
+</body>
+</html>
