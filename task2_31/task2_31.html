@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	.body-wrapper{
+		position: absolute;
+		height: 300px;
+		width: 600px;
+		margin:auto;
+		left:0;
+		right: 0;
+		top:0;
+		bottom: 0;
+		border:1px solid red;
+		text-align: center;
+	}
+
+	.label{
+		display: block;
+		position: absolute;
+		width: 100%;
+		top: 40px;
+		height: 40px;
+	}
+
+	.block-label{
+		display: block;
+	}
+
+	.none-label{
+		display: none;
+	}
+	.select-box{
+		height: 30px;
+		width: 140px;
+		font-size: 16px;
+		margin-right: 20px;
+	}
+
+
+
+	</style>
+</head>
+<body>
+	<div class="body-wrapper">
+		<div id="radio-wrapper">
+			<input type="radio" name="studentType" value="inCampus" checked id="radio">在校大学生
+			<input type="radio" name="studentType" value="outCampus" id="1" style="margin-left: 30px;">在校大学生
+		</div>
+		<label for="inCampus" class="label block-label">学校
+			<select name="city" id="" class="select-box">
+				<option value="北京" selected>北京</option>
+				<option value="重庆" >重庆</option>
+				<option value="四川">四川</option>
+			</select>
+
+			<select name="city" id="" class="select-box">
+				<option value="北京大学" selected>北京大学</option>
+				<option value="北京邮电大学">北京邮电大学</option>
+				<option value="清华大学">清华大学</option>
+			</select>
+
+		</label>
+
+		<label for="outCampus" class="label none-label">就业单位
+			<input type="text" class="workSpace" style="width: 300px;height: 30px;border-radius: 5px;">
+		</label>
+	</div>
+	<script type="text/javascript">
+		var oRadio = document.getElementById("radio-wrapper");
+		oRadio.onchange = function(e) {
+			/*var oEvent = e || window.event;
+			var target = oEvent.target ? oEvent.target:oEvent.srcElement;
+			console.log(target.id);
+			var aLabel = document.getElementsByTagName("label");*/
+			
+			if(target.id){
+				console.log(111);
+				aLabel[1].className = "label block-label";
+				aLabel[0].className = "label none-label";
+			}
+			else{
+				console.log(000);
+				aLabel[0].className = "label block-label";
+				aLabel[1].className = "label none-label";
+			}
+	
+	}
+
+
+	</script>
+</body>
+</html>
