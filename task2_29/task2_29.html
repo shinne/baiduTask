@@ -76,7 +76,12 @@
 			oBtn.onclick = function(){
 				var s = oInput.value;
 				var result = validateFn(s);
-				if(result >= 4 && result <= 16){
+				if(result == 0){
+					oInput.className = "input-box right-input-box";
+					oTips.className = "tips right-tips";
+					oTips.innerHTML = "输入数据不能为空";
+				}
+				else if(result >= 4 && result <= 16){
 					oInput.className = "input-box right-input-box";
 					oTips.className = "tips right-tips";
 					oTips.innerHTML = "输入字符符合规范";

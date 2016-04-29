@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.body-wrapper{
+			position: absolute;
+			margin:auto;
+			height: 600px;
+			top: 60px;
+			left: 0;
+			right: 0;
+
+		}
+
+		.form-box{
+			width: 400px;
+			height: 600px;
+			margin:0 auto;
+			text-align: left;
+		}
+		.input-box{
+			height: 46px;
+			width: 400px;
+			border:1px solid silver;
+			border-radius: 5px;
+			font-size: 20px;
+			margin-top: 26px;
+		}
+
+		.input-box:focus{
+			outline: 1px solid #4DECD9;
+		}
+
+		.right-input-box{
+			border:1px solid green;
+		}
+
+		.fault-input-box{
+			border:1px solid red;
+		}
+
+		.validate{
+			height: 40px;
+			width: 80px;
+			border-radius: 10px;
+			float: right;
+			margin-top: 12px;
+		}
+
+		.tips{
+			/* display: block; */
+			margin-top: 8px;
+/* 			margin-bottom: 18px; */
+			color:silver;
+		    display: none;
+		}
+
+		.right-tips{
+			color:green;
+			display: block;
+		}
+
+		.fault-tips{
+			color: red;
+			display: block;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="body-wrapper">
+		<div class="form-box" id="form-box">
+			<input type="text" class="input-box" id="name-box" placeholder="姓名" onfocus = "InputFocusFn(this)" onblur="InputBlurFn(this)">
+			<span class="tips" id="tips">请输入数据，长度为4-16</span>
+
+			<input type="password" class="input-box" id="password-box" placeholder="密码" onfocus = "InputFocusFn(this)" onblur="InputBlurFn(this)">
+			<span class="tips" id="tips">请输入密码，长度为4-16</span>
+
+			<input type="password" class="input-box" id="confirm-box" placeholder="密码" onfocus = "InputFocusFn(this)" onblur="InputBlurFn(this)">
+			<span class="tips" id="tips">重复输入密码</span>
+
+			<input type="text" class="input-box" id="email-box" placeholder="邮箱" onfocus = "InputFocusFn(this)" onblur="InputBlurFn(this)">
+			<span class="tips" id="tips">example@example.com</span>
+
+			<input type="text" class="input-box" id="tel-box" placeholder="电话" onfocus = "InputFocusFn(this)" onblur="InputBlurFn(this)">
+			<span class="tips" id="tips">请输入11位手机号码</span>
+
+			<button type="button" class="validate" id="validate">验证</button>
+			
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		//用来存放每次校验的结果，当所有的都为true的时候，button才能提交成功，不然会弹出alert提示框
+		var inputResult = {
+			"name":false,
+			"password":false,
+			"confirm":false,
+			"email":false,
+			"tel":false,
+		};
+
+		var tipsResult = {
+			"name":"姓名输入不能为空",
+			"password":"密码输入不能为空",
+			"confirm":"密码校验输入不能为空",
+			"email":"邮箱输入不能为空",
+			"tel":"电话输入不能为空",
+		}
+
+
+
+		/*var oForm = document.getElementById("form-box");*/
+
+		var oBtn = document.getElementById("validate");
+
+		function InputFocusFn(input){
+			var tips = input.nextSibling.nextSibling;
+			if(getStyle(tips,"display") == "none"){
+				tips.style.display = "block";
+			}
+		}
+			
+
+		//获取样式兼容
+		function getStyle(obj,attr){
+			if(obj.currentStyle){
+				return obj.currentStyle(attr);
+			}
+
+			else{
+				return getComputedStyle(obj,false)[attr];
+			}
+		}
+
+
+
+		function InputBlurFn(input) {
+			switch(input.id){
+				case "name-box":
+								nameCheck(input,"name");
+								break;
+				case "password-box":
+								nameCheck(input,"password");
+								break;
+				case "confirm-box":
+								confirmCheck(input,"confirm");
+								break;
+				case "email-box":
+								emailCheck(input,"email");
+								break;
+				case "tel-box":
+								telCheck(input,"tel");
+								break;
+
+			}
+			var tips = input.nextSibling.nextSibling;
+		}
+
+
+		//检查输入是否符合规范
+		function validateFn(string){
+				var s = string.trim();
+				var len = 0;
+				for(var i = 0 ; i < s.length ; i ++){
+					var c = s.charCodeAt(i);
+					if(c >=0 && c<= 128){
+						len++;
+					}
+					else{
+						len += 2;
+					}
+				}
+				return len;
+			}
+
+		//姓名和密码check
+		function nameCheck(obj,name){
+			var s = obj.value;
+			var result = validateFn(s);
+			if(result == 0){
+				renderResult(false,obj,name,"输入不能为空");
+			}
+			else if(result >= 4 && result <= 16){
+				renderResult(true,obj,name,"输入格式正确");
+			}
+			else{
+				renderResult(false,obj,name,"输入格式不正确");
+			}
+			console.log(inputResult);
+		}
+
+		//密码确认check
+		function confirmCheck(obj,name){
+			var s = obj.value;
+			var password = document.getElementById("password-box").value;
+			if(!inputResult["password"]){
+				renderResult(false,obj,name,"密码输入不正确，请重新输入密码");
+			}
+			else if(s == password){
+				renderResult(true,obj,name,"密码校验正确");
+			}
+			else{
+				renderResult(false,obj,name,"密码校验不正确");
+			}
+		}
+
+		//邮箱校验
+		function emailCheck(obj,name){
+			var s = obj.value;
+			//一串字母、数字、下划线   @  一串英文、数字  . 一串英文（长度是2-4）
+           	//	       \w +            @     [0-9a-z]     \.      [a-z]{2,4}
+			var re = /^\w+@[0-9a-z]+\.[a-z]{2,4}$/;
+			var result = re.test(s);
+			console.log(result);
+			if(result){
+				renderResult(true,obj,name,"邮箱格式正确");
+				tipsResult[name] = "邮箱格式正确";
+			}
+			else{
+				renderResult(false,obj,name,"邮箱格式不正确");
+				tipsResult[name] = "邮箱格式不正确";
+			}
+		}
+
+		//手机号码校验
+		function telCheck(obj,name){
+			var s = obj.value;
+			var re = /^1[0-9]{10}$/;
+			var result = re.test(s);
+			if(result){
+				renderResult(true,obj,name,"电话格式正确");
+				tipsResult[name] = "电话格式正确";
+			}
+			else{
+				renderResult(false,obj,name,"电话格式不正确");
+				tipsResult[name] = "电话格式不正确";
+			}
+		}
+
+		//check之后的renderDom
+		function renderResult(result,obj,name,sTips){
+			var oTips = obj.nextSibling.nextSibling;
+			if(result){
+				obj.className = "input-box right-input-box";
+				oTips.className = "tips right-tips";
+				oTips.innerHTML = sTips;
+				inputResult[name] = true;
+				tipsResult[name] = sTips;
+			}
+			else{
+				obj.className = "input-box fault-input-box";
+				oTips.className = "tips fault-tips";
+				oTips.innerHTML = sTips;
+				inputResult[name] = false;
+				tipsResult[name] = sTips;
+			}
+		}
+
+		oBtn.onclick = function () {
+			var submit = true;
+			for(var attr in inputResult){
+				console.log(attr);
+				if(!inputResult[attr]){
+
+					var obj = document.getElementById(attr + "-box");
+					renderResult(false,obj,attr,tipsResult[attr]);
+					console.log(obj);
+					submit = false;
+				}
+			}
+			if(!submit){
+				alert("输入不正确，请重新输入");
+			}
+			
+		}
+	</script>
+</body>
+</html>
