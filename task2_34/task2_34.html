@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		#rect{
+			position: absolute;
+			background: url(rect.png);
+			height: 30px;
+			width: 30px;
+			transform: rotate(0deg);
+			top:0px;
+			left:0px;	
+		}
+
+		button{
+			margin-top: 12px;
+			width: 60px;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="rect">
+	</div>
+	<canvas id="canvas">
+		
+	</canvas>
+
+	<div id="buttons">
+		<button id="left">left</button>
+		<button id="right">right</button>
+		<button id="up">up</button>
+		<button id="down">dwon</button>
+		<button id="traleft">tra left</button>
+		<button id="traright">tra right</button>
+		<button id="traup">tra up</button>
+		<button id="tradown">tra down</button>
+	</div>
+	<script>
+		var oCanvas = document.getElementById("canvas");
+		var oButtons = document.getElementById("buttons");
+		var oRect = document.getElementById("rect");
+		var direction = "up";
+
+
+		//匿名函数自执行，以免污染全局变量
+		(function(){
+			if(oCanvas.getContext){
+				var context = oCanvas.getContext("2d");
+				oCanvas.height =300;
+				oCanvas.width = 300;
+				paintLine(context,300,300);
+			}
+
+			function paintLine(ctx,width,height){
+				ctx.strokeStyle = "red";
+				for(var i = 0 ; i <= width/30; i++){
+					ctx.moveTo(i*30,0);
+					ctx.lineTo(i*30,300);
+					ctx.stroke();
+				}
+
+				for(var i = 0 ; i <= height/30; i++){
+					ctx.moveTo(0,i*30);
+					ctx.lineTo(300,i*30);
+					ctx.stroke();
+				}
+			}
+		})()
+
+		
+
+		oRect.style.transform = "rotate(0deg)";
+		oButtons.onclick = function(e) {
+			var control;
+			var oEvent = e || window.event;
+			var target = oEvent.srcElement || oEvent.target;
+			var control;
+			if(target.id == "left" || target.id == "right" || target.id == "up" || target.id == "down"){
+				control = "move";
+			}
+			switch(control){
+				//只有go的时候才执行gohead函数
+				case "move":
+							goHead(oRect,target.id,true);
+							break;
+				//当控制方向的时候用default
+				default :
+							control = target.id.slice(3);
+							goHead(oRect,control,false);
+
+				
+			}
+			
+		}
+
+
+		
+	
+		//这个函数是用来go的
+		function goHead(oRect,dire,rot){
+			ifBorder(dire,oRect,rot);
+		}
+
+		//当然go也会有很多种情况，将其封装起来
+		function ifBorder(dire,oRect,rot){
+			var result;
+			if(dire == "up"){
+				if(rot){
+					oRect.style.transform = "rotate(0deg)";
+				}
+				result = getStyle(oRect,"top");
+				if (result == "0px"){
+					return false;
+				}				
+				oRect.style.top = (parseInt(result) - 30) + "px";
+			}
+
+			else if(dire == "down"){
+				if(rot){
+					oRect.style.transform = "rotate(180deg)";
+				}
+				result = getStyle(oRect,"top");
+				if (result == "270px"){
+					return false;
+				}				
+				oRect.style.top = (parseInt(result) + 30) + "px";
+			}
+
+			else if(dire == "left"){
+				if(rot){
+					oRect.style.transform = "rotate(270deg)";
+				}
+				result = getStyle(oRect,"left");
+				if (result == "0px"){
+					return false;
+				}				
+				oRect.style.left = (parseInt(result) - 30) + "px";
+			}
+
+			else if(dire == "right"){
+				if(rot){
+					oRect.style.transform = "rotate(90deg)";
+				}
+				result = getStyle(oRect,"left");
+				if (result == "270px"){
+					return false;
+				}
+				oRect.style.left = (parseInt(result) + 30) + "px";
+			}
+		}
+
+
+		function getStyle(obj,attr){
+			if (obj.currentStyle) {
+				return obj.currentStyle[attr];
+			}
+			else{
+				return getComputedStyle(obj,false)[attr];
+			}
+		}
+
+	</script>
+</body>
+</html>
