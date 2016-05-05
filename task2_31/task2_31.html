@@ -34,7 +34,7 @@
 	}
 	.select-box{
 		height: 30px;
-		width: 140px;
+		width: 160px;
 		font-size: 16px;
 		margin-right: 20px;
 	}
@@ -46,17 +46,17 @@
 <body>
 	<div class="body-wrapper">
 		<div id="radio-wrapper">
-			<input type="radio" name="studentType" value="inCampus" checked id="radio">在校大学生
-			<input type="radio" name="studentType" value="outCampus" id="1" style="margin-left: 30px;">在校大学生
+			<input type="radio" name="studentType" value="inCampus" checked id="inCampus">在校大学生
+			<input type="radio" name="studentType" value="outCampus" id="outCampus" style="margin-left: 30px;">在校大学生
 		</div>
 		<label for="inCampus" class="label block-label">学校
-			<select name="city" id="" class="select-box">
+			<select name="city" id="select-parent" class="select-box">
 				<option value="北京" selected>北京</option>
 				<option value="重庆" >重庆</option>
 				<option value="四川">四川</option>
 			</select>
 
-			<select name="city" id="" class="select-box">
+			<select name="city" id="select-child" class="select-box">
 				<option value="北京大学" selected>北京大学</option>
 				<option value="北京邮电大学">北京邮电大学</option>
 				<option value="清华大学">清华大学</option>
@@ -69,25 +69,51 @@
 		</label>
 	</div>
 	<script type="text/javascript">
+		//将对应的城市名称和对应的大学写成json数组
+		var selections = {
+			"北京":["北京大学","北京邮电大学","清华大学"],
+			"重庆":["重庆大学","重庆科技学院","四川美术学院"],
+			"四川":["电子科技大学","四川大学","西南财经大学"]
+			};
 		var oRadio = document.getElementById("radio-wrapper");
 		oRadio.onchange = function(e) {
 			/*var oEvent = e || window.event;
 			var target = oEvent.target ? oEvent.target:oEvent.srcElement;
-			console.log(target.id);
-			var aLabel = document.getElementsByTagName("label");*/
-			
-			if(target.id){
+			console.log(target.id);*/
+			var aLabel = document.getElementsByTagName("label");
+			var bCampus = document.getElementById("inCampus").checked;
+			if(bCampus){
 				console.log(111);
-				aLabel[1].className = "label block-label";
-				aLabel[0].className = "label none-label";
-			}
-			else{
-				console.log(000);
 				aLabel[0].className = "label block-label";
 				aLabel[1].className = "label none-label";
 			}
-	
-	}
+			else{
+				console.log();
+				aLabel[1].className = "label block-label";
+				aLabel[0].className = "label none-label";
+			}
+		}
+
+		var oSelect = document.getElementById("select-parent");
+		var oSelectChild = document.getElementById("select-child");
+		/*console.log(oSelect.value);*/
+
+		//监听select-parent发生变化，当发生变化时更改select-child的选项
+		oSelect.onchange = function(e){
+			var selectItem = oSelect.value;
+			var aItems = selections[selectItem];
+			oSelectChild.innerHTML = null;
+			var oFragment = document.createDocumentFragment();
+			console.log(oFragment);
+			for(var attr in aItems){
+				var option = document.createElement("option");
+				option.value = aItems[attr];
+				option.innerHTML = aItems[attr];
+				oFragment.appendChild(option);
+			}
+			oSelectChild.appendChild(oFragment);
+
+		}
 
 
 	</script>

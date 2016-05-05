@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		#rect{
+			position: absolute;
+			background: url(rect.png);
+			height: 30px;
+			width: 30px;
+			transform: rotate(0deg);
+			top:0px;
+			left:0px;	
+		}
+
+		button{
+			margin-top: 12px;
+			width: 60px;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="rect">
+	</div>
+	<canvas id="canvas">
+		
+	</canvas>
+
+	<div id="buttons">
+		<button id="go">go</button>
+		<button id="left">left</button>
+		<button id="right">right</button>
+		<button id="back">back</button>
+	</div>
+	<script>
+		var oCanvas = document.getElementById("canvas");
+		var oButtons = document.getElementById("buttons");
+		var oRect = document.getElementById("rect");
+		var direction = "up";
+
+
+		//匿名函数自执行，以免污染全局变量
+		(function(){
+			if(oCanvas.getContext){
+				var context = oCanvas.getContext("2d");
+				oCanvas.height =300;
+				oCanvas.width = 300;
+				paintLine(context,300,300);
+			}
+
+			function paintLine(ctx,width,height){
+				ctx.strokeStyle = "red";
+				for(var i = 0 ; i <= width/30; i++){
+					ctx.moveTo(i*30,0);
+					ctx.lineTo(i*30,300);
+					ctx.stroke();
+				}
+
+				for(var i = 0 ; i <= height/30; i++){
+					ctx.moveTo(0,i*30);
+					ctx.lineTo(300,i*30);
+					ctx.stroke();
+				}
+			}
+		})()
+
+		
+
+		oRect.style.transform = "rotate(0deg)";
+		oButtons.onclick = function(e) {
+			var oEvent = e || window.event;
+			var target = oEvent.srcElement || oEvent.target;
+
+			switch(target.id){
+				//只有go的时候才执行gohead函数
+				case "go":
+							goHead(oRect);
+							break;
+				//当控制方向的时候用default
+				default :   rotAndDire(oRect,target.id);
+							break;
+				
+			}
+			
+		}
+
+
+		
+	
+		//这个函数是用来go的
+		function goHead(oRect){
+			ifBorder(direction,oRect);
+		}
+
+		//当然go也会有很多种情况，将其封装起来
+		function ifBorder(dire,oRect){
+			var result;
+			if(dire == "up"){
+				result = getStyle(oRect,"top");
+				if (result == "0px"){
+					console.log(false);
+					return false;
+				}				
+				oRect.style.top = (parseInt(result) - 30) + "px";
+			}
+
+			else if(dire == "down"){
+				result = getStyle(oRect,"top");
+				if (result == "270px"){
+					return false;
+				}				
+				oRect.style.top = (parseInt(result) + 30) + "px";
+			}
+
+			else if(dire == "left"){
+				result = getStyle(oRect,"left");
+				if (result == "0px"){
+					return false;
+				}				
+				oRect.style.left = (parseInt(result) - 30) + "px";
+			}
+
+			else if(dire == "right"){
+				result = getStyle(oRect,"left");
+				if (result == "270px"){
+					return false;
+				}
+				oRect.style.left = (parseInt(result) + 30) + "px";
+			}
+		}
+
+
+		function getStyle(obj,attr){
+			if (obj.currentStyle) {
+				return obj.currentStyle[attr];
+			}
+			else{
+				return getComputedStyle(obj,false)[attr];
+			}
+		}
+
+		//这个是掌握方向的
+		function rotAndDire(oRect,id){
+				var rotate = oRect.style.transform.match(/-\d+/);
+				if(!rotate){
+					rotate = oRect.style.transform.match(/\d+/);
+				}
+				switch(id){
+					case "right":
+								rotate = rotate - 90;
+								oRect.style.transform = "rotate("+ rotate + "deg)";
+								break;
+					case "left":
+								rotate = parseInt(rotate) + 90;
+								oRect.style.transform = "rotate("+ rotate + "deg)";
+								break;
+
+					case "back":
+								rotate = parseInt(rotate) + 180;
+								oRect.style.transform = "rotate("+ rotate + "deg)";
+								break;
+				}
+				directions(rotate);
+			}
+
+
+		//通过deg来控制direction
+		function directions(deg){
+			deg = deg/90;
+			if(deg < 0){
+				var round = Math.ceil(Math.abs(deg)/4);
+				deg = round*4 + deg;
+				
+			}
+			deg = deg % 4;
+			console.log(deg + "%");
+			switch(deg){
+				case 0 :
+						direction = "up";
+						break;
+				case 1 :
+						direction = "right";
+						break;
+				case 2 :
+						direction = "down";
+						break;
+				case 3 : 
+						direction = "left";
+						break;
+			}
+		}
+
+
+
+	</script>
+</body>
+</html>
