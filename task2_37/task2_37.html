@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	    *{
+	    	margin:0px;
+	    	padding: 0px;
+	    }
+		.mask-wrapper{
+			position: fixed;
+			height: 100%;
+			width: 100%;
+			top: 0px;
+			background-color:#646464;
+			filter: alpha(opacity=30);
+			background-color: rgba(100,100,100,0.3);
+			z-index: 9000;
+			display: none;
+		}
+		.suspend{
+			position: absolute;
+			height: 200px;
+			width: 300px;
+			margin:auto;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			background-color: white;
+			border: 1px solid #646464;
+		}
+		.close{
+			display: block;
+			position: absolute;
+			width: 100px;
+			height: 60px;
+			margin: auto;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+		}
+
+		.openMask{
+			position: absolute;
+			top: 200px;
+			left: 300px;
+			height: 60px;
+			width: 100px;
+		}
+
+	</style>
+</head>
+<body>
+	<button class="openMask" id="openMask">点我弹出框</button>
+	<div class="mask-wrapper" id="mask-wrapper">
+		<div class="suspend">
+			<button class="close" id="close">关闭弹窗</button>
+		</div>
+	</div>
+
+	<script>
+		var oMask = document.getElementById("mask-wrapper");
+		var oCloseBtn = document.getElementById("close");
+		var oOpenBtn = document.getElementById("openMask");
+
+		function getStyle(obj,attr){
+			if (obj.currentStyle) {
+				return obj.currentStyle[attr];
+			}
+			else{
+				return getComputedStyle(obj,false)[attr];
+			}
+		}
+
+		function closeOrOpen(){
+			if(getStyle(oMask,"display") == "block"){
+				oMask.style.display = "none";
+			}
+			else{
+				oMask.style.display = "block";
+			}
+		}
+		
+		oCloseBtn.onclick = function(){
+			oMask.style.display = "none";
+		}
+
+		oOpenBtn.onclick = function(){
+			oMask.style.display = "block";
+		}
+
+		oMask.onclick = function (e) {
+			var oEvent = e || window.event;
+			var target = oEvent.srcElement || oEvent.target;
+			if(target == this){
+				oMask.style.display = "none";
+			}
+		}
+
+	</script>
+</body>
+</html>
