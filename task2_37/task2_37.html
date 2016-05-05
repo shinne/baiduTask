@@ -17,7 +17,7 @@
 			filter: alpha(opacity=30);
 			background-color: rgba(100,100,100,0.3);
 			z-index: 9000;
-			display: none;
+			display: none; 
 		}
 		.suspend{
 			position: absolute;
@@ -25,9 +25,9 @@
 			width: 300px;
 			margin:auto;
 			left: 0;
-			right: 0;
+			right: 0; 
 			top: 0;
-			bottom: 0;
+		    bottom: 0;
 			background-color: white;
 			border: 1px solid #646464;
 		}
@@ -56,7 +56,7 @@
 <body>
 	<button class="openMask" id="openMask">点我弹出框</button>
 	<div class="mask-wrapper" id="mask-wrapper">
-		<div class="suspend">
+		<div class="suspend" id="suspend">
 			<button class="close" id="close">关闭弹窗</button>
 		</div>
 	</div>
@@ -65,6 +65,7 @@
 		var oMask = document.getElementById("mask-wrapper");
 		var oCloseBtn = document.getElementById("close");
 		var oOpenBtn = document.getElementById("openMask");
+		var oSuspend = document.getElementById("suspend");
 
 		function getStyle(obj,attr){
 			if (obj.currentStyle) {
@@ -75,30 +76,53 @@
 			}
 		}
 
-		function closeOrOpen(){
-			if(getStyle(oMask,"display") == "block"){
-				oMask.style.display = "none";
-			}
-			else{
-				oMask.style.display = "block";
-			}
+		//关闭浮动层时，将里面的东西居中
+		function close(){
+			oMask.style.display = "none";
+			oSuspend.style = "";
+			oSuspend.className = "suspend";
 		}
 		
-		oCloseBtn.onclick = function(){
-			oMask.style.display = "none";
-		}
+
+		oCloseBtn.onclick = close;
 
 		oOpenBtn.onclick = function(){
 			oMask.style.display = "block";
 		}
 
+
 		oMask.onclick = function (e) {
 			var oEvent = e || window.event;
 			var target = oEvent.srcElement || oEvent.target;
 			if(target == this){
-				oMask.style.display = "none";
+				close();
 			}
 		}
+
+		//实现拖拽
+		oSuspend.onmousedown = function(e){
+			var oEvent = e || window.event;
+
+			var l = oEvent.clientX - oSuspend.offsetLeft;
+			var t = oEvent.clientY - oSuspend.offsetTop;
+			oSuspend.style.bottom = "auto";
+			oSuspend.style.right = "auto";
+
+			document.onmousemove = function(e){
+				var oEvent = e || window.event;
+				var left = oEvent.clientX - l;
+				var top = oEvent.clientY - t;
+				oSuspend.style.left = left + "px";
+				oSuspend.style.top = top + "px";
+			}
+
+			document.onmouseup = function(){
+				document.onmousemove = null;
+				document.onmouseup = null;
+			}
+			return false;
+		}
+
 
 	</script>
 </body>
