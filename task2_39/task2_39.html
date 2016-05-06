@@ -4,45 +4,55 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<style>
-		.body-wrapper{
-			position: relative;
-			margin:80px auto;
-			width: 600px;
-			height: 600px;
+		*{
+			margin: 0px;
+			padding: 0px;
 		}
 
 		#table-wrapper{
 			height: auto;
-			width: 500px;
+			width: 405px;
 			position: absolute;
-			margin: 0 auto;
+			margin: 100px auto;
 			left: 0;
 			right: 0;
 			text-align: center;	
 		}
 
-		tr{
-			height: 36px;
+		td{
+			height: 36px !important;
+			width: 80px;
+		}
+
+		thead tr.frozen{
+			position: fixed;
+			top: 0;
 		}
 
 		thead tr td{
 			background-color: rgb(106,221,127);
 			color:white;
 		}
-		table,th,tr,td{
+
+		table,th,td{
 			border: 1px solid black;
-			border-collapse: collapse;
+			border-collapse: collapse !important;
 		}
+
+		table{
+			border:none;
+		}
+
 
 	</style>
 </head>
 <body>
 
-	<div class="body-wrapper">
+	<!-- <div class="body-wrapper" id="body-wrapper"> -->
 		<table id="table-wrapper">
 			
 		</table>
-	</div>
+	<!-- </div> -->
 	<script>
 		//	用来确定点击次数，进行升序和降序切换
 		var keyCount = {
@@ -82,10 +92,11 @@
 			oTable.appendChild(oTh);
 		}
 
-		
+		var oWrapper = document.getElementById("body-wrapper");
 		var oHead = document.getElementById("thead");
 		var oTable = document.getElementById("table-wrapper");
 		var oFragment = document.createDocumentFragment();
+
 		renderTable(dataSource);
 
 
@@ -158,6 +169,25 @@
 			});
 		}
 		//对datasource进行排序
+
+
+		//当window的scroll滑动到一定程度的时候，表单头改为fixed
+		window.onscroll = function(){
+			var iScroll = document.documentElement.scrollTop || document.body.scrollTop; 
+			console.log(iScroll);
+			var iTableTop = oTable.offsetTop;
+			if(iTableTop < iScroll){
+				var oHead = document.getElementById("thead");
+				oHead.className = "frozen";
+				console.log(thead);
+			}
+			else{
+				var oHead = document.getElementById("thead");
+				console.log(thead);
+				oHead.className = "";
+			}
+
+		}
 
 	</script>
 </body>
