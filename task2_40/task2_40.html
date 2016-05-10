@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	.body-wrapper{
+		position: absolute;
+		margin:auto;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		height: 300px;
+		width: 500px;
+		text-align: center;
+		border:1px solid red;
+		padding: 50px;
+	}
+
+	.date-wrapper{
+		position: absolute;
+		border :1px solid red;
+		height :220px;
+		width : 245px;
+		padding: 0 10px;
+	}
+
+	.date-header{
+		height: 40px;
+		width: 100%;
+		border-bottom: 1px solid red;
+		line-height: 40px;
+	}
+	.date-header p a{
+		display: inline-block;
+		width: 35px;
+		margin-right:0;
+		margin-left: 0;
+		text-decoration: none;
+	}
+
+	.date-title span{
+		float: left;
+		display: inline-block;
+		height: 30px;
+		width: 35px;
+		font-weight: bold;
+	}
+	.date-body span{
+		float: left;
+		display: inline-block;
+		height: 30px;
+		text-decoration: none;
+		width: 35px;
+		line-height: 30px;
+		cursor: pointer;
+	}
+
+	span.color-ful{
+		background-color: red;
+	}
+
+
+	</style>
+</head>
+<body>
+
+	<div class="body-wrapper">
+		<input type="text" class="input-text" id="input-text">
+	</div>
+	
+	<script>
+
+
+ 
+		function getStyle(obj,attr){
+			if(obj.currentStyle){
+				return obj.currentStyle[attr];
+			}
+			else{
+				return getComputedStyle(obj,false)[attr];
+			}
+		}
+
+
+
+		var input = document.getElementById("input-text");
+
+		function Calendar(){
+			this.initialize.apply(this,arguments);
+		}
+
+		Calendar.prototype = {
+			constructor:Calendar,
+			templateHeader:'<div class="date-header">' +
+				'<p style="margin:0;text-align: center;">' +
+					'<a href=""><<</a>'+
+					'<a href=""><</a>'+
+					'<a style="width: auto;" href="" id="yearMonth">2016年6月</a>'+
+					'<a href="">></a>'+
+					'<a href="">>></a>'+
+				'</p>'+
+			'</div>'+
+			'<div class="date-title">'+
+				'<span>日</span>'+
+				'<span>一</span>'+
+				'<span>二</span>'+
+				'<span>三</span>'+
+				'<span>四</span>'+
+				'<span>五</span>'+
+				'<span>六</span>'+
+			'</div>',
+
+			addDateContent:function(sDate){
+				this.dateContent = [];
+				/*var date = sDate.split('-');*/
+				this.year = sDate.getFullYear();       //得到year年份
+				this.month = sDate.getMonth();	  	   //得到月份，从0开始
+				this.day = sDate.getDate();		       //得到几号
+				console.log(this.day + "   ");
+				var oDate = new Date();
+
+				oDate.setYear(this.year);
+				oDate.setMonth(this.month);
+				oDate.setDate(0);
+				this.week = (parseInt(oDate.getDay()) + 1)%7;   //得这个月第一天是周几     
+				oDate.setMonth(parseInt(this.month)+1);
+				oDate.setDate(0);
+				this.allDay =  oDate.getDate();       //得到这个月一共有多少天
+				console.log("这个月的天数" + this.allDay);
+			},
+
+			removeDate:function(){
+				this.container.parentNode.removeChild(this.container);
+				this.container = null;
+			},
+
+			clickEvent:function(){
+				/*console.log("test");*/
+				var that = this;
+				return document.onclick = function(e){
+					var oEvent = window.event || e;
+					var target = oEvent.srcElement || oEvent.target;
+					if(target != that.input){
+						that.removeDate();
+
+					}
+					else{
+						var d = new Date();
+						that.addDateContent(d);
+						that.renderDate();
+					}
+				}
+				
+			},
+
+			outClick:function(e){
+
+			},
+
+			
+			renderDate:function(){
+				var content = null;
+				//得到容器
+				if(!this.container){
+					this.container = document.createElement("div");
+					this.container.className = "date-wrapper";
+					this.container.id = "date-wrapper";
+					this.container.innerHTML = this.templateHeader;
+					//创建盛装日期的容器
+					content = document.createElement("div");
+					content.className = "date-body";
+					content.id = "date-body";
+					this.container.style.left =  this.input.offsetLeft  + "px";
+					this.container.style.top = ( this.input.offsetTop + parseInt(getStyle(this.input,"height")) + 8)  + "px";
+				}
+				else{
+					content = document.getElementById("date-body");
+					content.innerHTML = "";
+				}
+				
+				var d = this.week;
+				d = parseInt(d)*35;
+				content.innerHTML += "<span style='margin-left:" + d + "px'>" + 1 + "</span>"
+				for(var i = 2 ; i <= this.allDay; i++){
+					if(i == this.day){
+					content.innerHTML += "<span class='color-ful'>" + i + "</span>";
+					}
+					else{
+						content.innerHTML += "<span>" + i + "</span>";
+					}
+					
+				}
+				this.container.appendChild(content);
+				this.input.parentNode.appendChild(this.container);
+				var c = document.getElementById("yearMonth");
+				c.innerHTML = this.year + '年' + (parseInt(this.month)+1) + '月';
+
+			},
+
+
+			initialize:function(input){
+				console.log(input);
+				this.input = input;
+				this.dateContent = [];
+				this.container = null;
+				this.clickEvent();
+			}
+		}
+
+
+		var a = new Calendar(input);
+		//代表2016年5月10日
+		
+
+		/*a.inputEvent();*/
+
+	</script>
+</body>
+</html>
