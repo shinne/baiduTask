@@ -6,7 +6,7 @@
 
 .shinne-img img{
 	position: absolute;
-	border:1px solid red;
+	border:2px solid #E8E7E7;
 	/*不会变形*/
 	object-fit: cover;
 }
