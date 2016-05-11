@@ -41,18 +41,13 @@
 
 /*three children*/
 .shinne-img img:first-child:nth-last-of-type(3){
-	width: 62.5%;
 	height: 100%;
 }
 .shinne-img img:first-child:nth-last-of-type(3) ~ img:nth-of-type(2){
-	width: 40%;
 	height: 50%;
-	left: 60%;
 }
 .shinne-img img:first-child:nth-last-of-type(3) ~ img:nth-of-type(3){
-	width: 40%;
 	height: 50%;
-	left: 60%;
 	top: 50%;
 }
 
@@ -80,24 +75,16 @@
 
 /*five children*/
 .shinne-img img:first-child:nth-last-of-type(5){
-	width: 66.67%;
 	height: 66.67%;
 }
 .shinne-img img:first-child:nth-last-of-type(5) ~ img:nth-of-type(2){
-	width: 33.33%;
-	height: 41.62%;
-	left: 66.67%;
+	height: 40%;
 }
 .shinne-img img:first-child:nth-last-of-type(5) ~ img:nth-of-type(3){
 	width: 33.33%;
-	height: 58.38%;
-	top: 41.62%;
-	left: 66.67%;
 }
 .shinne-img img:first-child:nth-last-of-type(5) ~ img:nth-of-type(4){
-	width: 33.33%;
 	height: 33.33%;
-	left: 33.33%;
 	top: 66.67%;
 }
 .shinne-img img:first-child:nth-last-of-type(5) ~ img:nth-of-type(5){
