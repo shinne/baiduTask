@@ -1,0 +1,141 @@
+.shinne-img{
+	position: relative;
+	height: 400px;
+	width: 500px;
+}
+
+.shinne-img img{
+	position: absolute;
+	border:1px solid red;
+	/*不会变形*/
+	object-fit: cover;
+}
+
+/*
+符合img是父元素的第一个元素并且是父元素的倒数第二个元素
+*/
+/* .shinne-img img:first-child:nth-last-of-type(2){
+	height:100%;
+	width: 100%;
+}
+ */
+ /*one children*/
+.shinne-img img:first-child{
+	height:100%;
+	width: 100%;
+}
+
+/*two children*/
+.shinne-img img:first-child:nth-last-of-type(2){
+	width: 66.67%;
+	height: 100%;
+	-webkit-clip-path: polygon(0% 0%,100% 0%,50% 100%,0% 100%);
+}
+
+.shinne-img img:first-child:nth-last-of-type(2) ~ img:nth-of-type(2){
+	width: 66.67%;
+	left: 33.33%;
+	height: 100%;
+	-webkit-clip-path: polygon(50% 0%,100% 0%,100% 100%,0% 100%);
+}
+
+/*three children*/
+.shinne-img img:first-child:nth-last-of-type(3){
+	width: 62.5%;
+	height: 100%;
+}
+.shinne-img img:first-child:nth-last-of-type(3) ~ img:nth-of-type(2){
+	width: 40%;
+	height: 50%;
+	left: 60%;
+}
+.shinne-img img:first-child:nth-last-of-type(3) ~ img:nth-of-type(3){
+	width: 40%;
+	height: 50%;
+	left: 60%;
+	top: 50%;
+}
+
+/*four children*/
+.shinne-img img:first-child:nth-last-of-type(4){
+	width: 50%;
+	height:50%;
+}
+.shinne-img img:first-child:nth-last-of-type(4) ~ img:nth-of-type(2){
+	width: 50%;
+	height: 50%;
+	left: 50%;
+}
+.shinne-img img:first-child:nth-last-of-type(4) ~ img:nth-of-type(3){
+	width: 50%;
+	height: 50%;
+	top: 50%;
+}
+.shinne-img img:first-child:nth-last-of-type(4) ~ img:nth-of-type(4){
+	width: 50%;
+	height: 50%;
+	left: 50%;
+	top: 50%;
+}
+
+/*five children*/
+.shinne-img img:first-child:nth-last-of-type(5){
+	width: 66.67%;
+	height: 66.67%;
+}
+.shinne-img img:first-child:nth-last-of-type(5) ~ img:nth-of-type(2){
+	width: 33.33%;
+	height: 41.62%;
+	left: 66.67%;
+}
+.shinne-img img:first-child:nth-last-of-type(5) ~ img:nth-of-type(3){
+	width: 33.33%;
+	height: 58.38%;
+	top: 41.62%;
+	left: 66.67%;
+}
+.shinne-img img:first-child:nth-last-of-type(5) ~ img:nth-of-type(4){
+	width: 33.33%;
+	height: 33.33%;
+	left: 33.33%;
+	top: 66.67%;
+}
+.shinne-img img:first-child:nth-last-of-type(5) ~ img:nth-of-type(5){
+	width: 33.33%;
+	height: 33.33%;
+	top: 66.67%;
+}
+
+/*six children*/
+.shinne-img img:first-child:nth-last-of-type(6){
+	width: 66.67%;
+	height: 66.67%;
+}
+.shinne-img img:first-child:nth-last-of-type(6) ~ img:nth-of-type(2){
+	width: 33.33%;
+	height: 33.33%;
+	left: 66.66%;
+}
+.shinne-img img:first-child:nth-last-of-type(6) ~ img:nth-of-type(3){
+	width: 33.33%;
+	height: 33.33%;
+	top: 33.33%;
+	left: 66.66%;
+}
+.shinne-img img:first-child:nth-last-of-type(6) ~ img:nth-of-type(4){
+	width: 33.33%;
+	height: 33.33%;
+	left: 66.67%;
+	top: 66.67%;
+}
+.shinne-img img:first-child:nth-last-of-type(6) ~ img:nth-of-type(5){
+	width: 33.33%;
+	height: 33.33%;
+	top: 66.67%;
+	left: 33.33%;
+}
+.shinne-img img:first-child:nth-last-of-type(6) ~ img:nth-of-type(6){
+	width: 33.33%;
+	height: 33.33%;
+	top: 66.67%;
+}
