@@ -92,7 +92,7 @@
 		//如果要写多个prototype最好将其封装到对象之中
 		Calendar.prototype = {
 			constructor:Calendar,
-			templateHeader:'<div class="date-header">' +
+			templateHeader:'<div class="date-header" id="date-header">' +
 				
 					'<span  id="preYear"><<</span>'+
 					'<span  id="preMonth"><</span>'+
@@ -191,12 +191,16 @@
 			clickEvent:function(){
 				
 				var that = this;
-				console.log(that);
-
 				this.bind(document,"click",function(e){
 					var oEvent = window.event || e;
 					var target = oEvent.srcElement || oEvent.target;
-					console.log(that);
+					var dateHeader = null;
+					var dateBody = null;
+					if(that.container){
+						var dateHeader = that.getElement(that.container,"date-header");
+						var dateBody = that.getElement(that.container,"date-body");
+					}
+
 					if(target == that.input){
 						if(that.input.value){
 							var d = new Date();
@@ -214,7 +218,7 @@
 						
 					}
 
-					else if(target.parentNode.className == "date-header"){
+					else if(target.parentNode == dateHeader){
 						console.log("else if");
 						if(target.id == "preYear"){
 							var d = new Date();
@@ -249,7 +253,7 @@
 
 						}
 					}
-					else if(target.parentNode.className == 'date-body'){
+					else if(target.parentNode == dateBody){
 						if(target.nodeName = "SPAN"){
 							var b = that.dateFormat(that.year,that.month,target.innerHTML);
 							that.input.value = b;
@@ -298,6 +302,16 @@
 		            node['on' + type] = handler;
 		        }
 		    },
+
+		    getElement:function(parent,id){
+		    	var array = parent.getElementsByClassName(id);
+		    	for(var i = 0 ; i < array.length ; i++){
+		    		if(array[i].parentNode == parent){
+		    			return array[i];
+		    		}
+		    	}
+		    	return null;
+		    }
 
 		}
 
