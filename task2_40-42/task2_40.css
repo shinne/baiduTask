@@ -1,0 +1,52 @@
+.date-wrapper{
+		position: absolute;
+		border :1px solid #29ADC7;
+		height :250px;
+		width : 245px;
+		padding: 0 10px;
+	}
+
+	.date-header{
+		height: 40px;
+		width: 100%;
+		border-bottom: 1px solid #29ADC7;
+		line-height: 40px;
+		text-align: center;
+	}
+	.date-header span{
+		display: inline-block;
+		width: 35px;
+		margin-right:0;
+		margin-left: 0;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.date-title span{
+		float: left;
+		display: inline-block;
+		height: 30px;
+		width: 35px;
+		font-weight: bold;
+	}
+	.date-body span{
+		float: left;
+		display: inline-block;
+		height: 30px;
+		text-decoration: none;
+		width: 35px;
+		line-height: 30px;
+		cursor: pointer;
+		text-align: center;
+	}
+
+	.date-body{
+		height: 210px;
+	}
+	span.color-ful{
+		background-color: #29ADC7;
+		border-radius: 5px;
+	}
+	#yearMonth{
+		font-weight: bold;
+	}
