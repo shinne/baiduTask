@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	.body-wrapper{
+		width: 70%;
+		overflow: auto;
+		margin: auto;
+		border: 1px solid red;
+	}
+
+	.waterfall-container{
+		width: 100%;
+		height: auto;
+		overflow: auto;
+	}
+
+	.waterfall-column{
+		padding: 8px;
+		height: auto;
+		box-sizing: border-box;
+	}
+
+	.waterfall-box{
+		width: 100%;
+		margin-bottom: 12px;
+		border:1px solid black;
+	}
+
+	.waterfall-box img{
+		width: 100%;
+		object-fit: cover;
+	}
+	.waterfall-box p {
+		margin:0;
+		text-align: center;
+	}
+
+
+	/*插件*/
+	.waterfall-column{
+		float: left;
+	}
+	.waterfall-box img{
+		width: 100%;
+		object-fit: cover;
+	}
+	
+
+	</style>
+	<script type="text/javascript" src="task2_44_waterfall.js"></script>
+</head>
+<body>
+	<div class="body-wrapper">
+		<div class="waterfall-container">
+			<div class="waterfall-box">
+				<img src="http://placehold.it/350x500/E97452/fff" alt="">
+				<p>1</p>
+			</div>
+			<div class="waterfall-box">
+				<img src="http://placehold.it/350x50/E96652/fff" alt="">
+				<p>2</p>
+			</div>
+			<div class="waterfall-box">
+				<img src="http://placehold.it/50x260/c97452/fff" alt="">
+				<p>3</p>
+			</div>
+			<div class="waterfall-box">
+				<img src="http://placehold.it/90x330/E97452/fff" alt="">
+				<p>4</p>
+			</div>
+			<div class="waterfall-box">
+				<img src="http://placehold.it/120x120/E97452/fff" alt="">
+				<p>5</p>
+			</div>
+			<div class="waterfall-box">
+				<img src="http://placehold.it/900x60/E97452/fff" alt="">
+				<p>6</p>
+			</div>
+		
+		</div>
+	</div>
+	<script type="text/javascript">
+		var a = new Waterfall({
+			"column":4,
+			"container":".waterfall-container",
+			"box":".waterfall-box",
+		})
+		
+	</script>
+</body>
+</html>
