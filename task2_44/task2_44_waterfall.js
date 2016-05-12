@@ -14,10 +14,13 @@ Waterfall.prototype = {
 		this.box = document.querySelectorAll(box);
 		this.initialColumns();
 		var that = this;
+		/**
+		 * [onload 当页面onload完全时才进行addBox,这样img才能填充box,column才会有高度，不然offsetHeight会很小]
+		 * @return {[type]} [description]
+		 */
 		window.onload = function(){
 			that.addBox(false);
 		}
-		
 	},
 
 	/**
@@ -29,8 +32,6 @@ Waterfall.prototype = {
 		var index = 0;
 		for(var i = 0 ; i < this.column ; i++){
 			var height = this.columns[i].offsetHeight;
-			        console.log(this.columns[i]);
-			        console.log(":" + this.columns[i].offsetHeight)
 			if(height < min){
 				/*console.log(i);*/
 				index = i ;
@@ -70,19 +71,18 @@ Waterfall.prototype = {
 		if(addNew){
 			var index = this.getMinHeightColumnIndex();
 			var img = document.createElement("img");
-			img.src = src;
-			var description = document.createElement("p");
+			img.src = imgSrc;
+			var p = document.createElement("p");
 			p.innerHTML = description;
 			var box = this.createBox({
-				"img":box,
-				"description":description,
+				"img":img,
+				"description":p,
 			});
 			this.columns[index].appendChild(box);
 		}
 		else{
 			for(var i = 0; i < this.box.length ; i ++){
 				var index = this.getMinHeightColumnIndex();
-				console.log(this.box[i]);
 				this.columns[index].appendChild(this.box[i]);
 			}
 		}
@@ -96,9 +96,37 @@ Waterfall.prototype = {
 	 */
 	createBox:function(content){
 		var box = document.createElement("div");
-		div.className = "waterfall-box";
-		div.appendChild(content.img);
-		div.appendChild(content.description);
+		box.className = "waterfall-box";
+		box.appendChild(content.img);
+		console.log(content.description);
+		box.appendChild(content.description);
 		return box;
+	},
+
+	changeColumns:function(column){
+		this.column = column;
+		this.columns = [];
+		this.initialColumns();
+		this.addBox(false);
+	},
+
+	getColumn:function(){
+		return this.column;
+	},
+
+	getContainerHeight:function(){
+		return this.container.offsetHeight + this.container.offsetTop;
 	}
 }
+
+/*
+			 var size = ['660x250', '300x400', '350x500', '200x320', '300x300'];
+  			 var color = [ 'E97452', '4C6EB4', '449F93', 'D25064', 'E59649' ];
+
+			addBox.onclick = function(){
+				var srcSize = size[Math.random() * size.length];
+				var srcColor = size[Math.random() * color.length];
+				console.log(srcSize + srcColor);
+				waterfall.addBox(true,)
+			}
+*/

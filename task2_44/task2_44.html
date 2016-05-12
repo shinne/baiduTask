@@ -4,6 +4,14 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<style>
+	.button-wrapper{
+		position: relative;
+		margin: auto;
+		text-align: center;
+		top:20px;
+		height: 60px;
+		vertical-align: middle;
+	}
 	.body-wrapper{
 		width: 70%;
 		overflow: auto;
@@ -15,6 +23,7 @@
 		width: 100%;
 		height: auto;
 		overflow: auto;
+		top:120px;
 	}
 
 	.waterfall-column{
@@ -53,41 +62,92 @@
 	<script type="text/javascript" src="task2_44_waterfall.js"></script>
 </head>
 <body>
+
+	<div class="button-wrapper">
+		<button class="minusColumn" id="minus_column">减小column</button>
+		<button class="addColumn" id="add_column">增加column</button>
+		<button class="addBox" id="add_box">增加图片</button>
+	</div>
+	
 	<div class="body-wrapper">
 		<div class="waterfall-container">
 			<div class="waterfall-box">
-				<img src="http://placehold.it/350x500/E97452/fff" alt="">
+				<img src="http://placehold.it/350x500/4C6EB4/fff" alt="">
 				<p>1</p>
 			</div>
 			<div class="waterfall-box">
-				<img src="http://placehold.it/350x50/E96652/fff" alt="">
+				<img src="http://placehold.it/350x560/FF8888/fff" alt="">
 				<p>2</p>
 			</div>
 			<div class="waterfall-box">
-				<img src="http://placehold.it/50x260/c97452/fff" alt="">
+				<img src="http://placehold.it/150x260/4C6EB4/fff" alt="">
 				<p>3</p>
 			</div>
 			<div class="waterfall-box">
-				<img src="http://placehold.it/90x330/E97452/fff" alt="">
+				<img src="http://placehold.it/190x330/FFB6C1/fff" alt="">
 				<p>4</p>
 			</div>
 			<div class="waterfall-box">
-				<img src="http://placehold.it/120x120/E97452/fff" alt="">
+				<img src="http://placehold.it/120x120/FFB3FF/fff" alt="">
 				<p>5</p>
 			</div>
 			<div class="waterfall-box">
-				<img src="http://placehold.it/900x60/E97452/fff" alt="">
+				<img src="http://placehold.it/290x160/00AAAA/fff" alt="">
 				<p>6</p>
 			</div>
 		
 		</div>
 	</div>
 	<script type="text/javascript">
-		var a = new Waterfall({
+			var waterfall = new Waterfall({
 			"column":4,
 			"container":".waterfall-container",
 			"box":".waterfall-box",
-		})
+			});
+
+
+			var minusColumn = document.getElementById("minus_column");
+			var addColumn = document.getElementById("add_column");
+			var addBox = document.getElementById("add_box");
+
+			minusColumn.onclick = function(){
+				var column = waterfall.getColumn();
+				column--;
+				waterfall.changeColumns(column);
+			}
+
+			addColumn.onclick = function(){
+				var column = waterfall.getColumn();
+				column++;
+				waterfall.changeColumns(column);
+			}
+
+			var size = ['660x250', '300x400', '350x500', '200x320', '300x300','230x390'];
+  			var color = ['4C6EB4', 'D25064', 'E59649','00AAAA','99FF33','FFB6C1','FFB3FF' ];
+
+  			var i = 7;
+  			function add(){
+  				var a = parseInt(Math.random() * (size.length-1));
+				console.log(a + "a");
+				var srcSize = size[a];
+				var b = parseInt(Math.random() * (color.length-1));
+				var srcColor = color[b];
+				var src = "http://placehold.it/" + srcSize + "/" + srcColor + "/fff";
+				waterfall.addBox(true,src,i++);
+  			}
+
+			addBox.onclick = add;
+
+			window.onscroll = function(){
+				var scroll = (document.documentElement.scrollTop ||  document.body.scrollTop)+(document.documentElement.clientHeight || document.body.clientHeight);
+				console.log(scroll + "scroll");
+				var containerHeight = waterfall.getContainerHeight();
+				console.log(containerHeight + "containerHeight");
+				if(scroll > containerHeight){
+					add();
+				}
+			}
+
 		
 	</script>
 </body>
