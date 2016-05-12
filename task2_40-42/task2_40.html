@@ -57,6 +57,7 @@
 		width: 35px;
 		line-height: 30px;
 		cursor: pointer;
+		text-align: center;
 	}
 
 	.date-body{
@@ -78,6 +79,8 @@
 	<div class="body-wrapper">
 		<input type="text" class="input-text" id="input-text" readonly=true>
 	</div>
+
+	<input type="text" class="test" id="test" readonly="true">
 	
 	<script>
 
@@ -149,7 +152,7 @@
 			
 				this.content = document.getElementById("date-body");
 				if(this.content){
-					content.innerHTML = "";
+					this.content.innerHTML = "";
 				}
 				else{
 					//创建盛装日期的容器
@@ -186,13 +189,14 @@
 			},
 
 			clickEvent:function(){
-				/*console.log("test");*/
+				
 				var that = this;
-				return document.onclick = function(e){
+				console.log(that);
+
+				this.bind(document,"click",function(e){
 					var oEvent = window.event || e;
 					var target = oEvent.srcElement || oEvent.target;
-					
-					//点击出现与否
+					console.log(that);
 					if(target == that.input){
 						if(that.input.value){
 							var d = new Date();
@@ -211,6 +215,7 @@
 					}
 
 					else if(target.parentNode.className == "date-header"){
+						console.log("else if");
 						if(target.id == "preYear"){
 							var d = new Date();
 							d.setYear(that.year - 1);
@@ -255,11 +260,8 @@
 					else{
 						that.removeDate();
 					}
-				}
-				return false;
-			},
-
-			outClick:function(e){
+					return false;
+				});
 
 			},
 
@@ -283,7 +285,19 @@
 				this.dateContent = [];
 				this.container = null;
 				this.clickEvent();
-			}
+			},
+
+			bind: function (node, type, handler) {
+		        if (node.addEventListener) {
+		            node.addEventListener(type, handler, false);
+		        } else if (node.attachEvent) {
+		            node.attachEvent('on' + type, function(){
+		            	return handler.call(node);
+		            });
+		        } else {
+		            node['on' + type] = handler;
+		        }
+		    },
 
 		}
 
@@ -300,9 +314,15 @@
 
 
 		var input = document.getElementById("input-text");
+		var test = document.getElementById("test");
+		new Calendar({
+			"input":test,
+		})
 		var a = new Calendar({
 			"input":input,
 		});
+
+		
 		
 
 	</script>
