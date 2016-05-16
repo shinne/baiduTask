@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    *{
+        padding: 0;
+        margin:0;
+    }
+
+    .body-wrapper{
+        position: relative;
+        margin:0 auto;
+        width: 70%;
+    }
+    </style>
+    
+    <link rel="stylesheet" href="rowphoto.css">
+    <script type="text/javascript" src="rowphoto.js"></script>
+</head>
+<body>
+    <div class="body-wrapper">
+        <div class="photo-container">
+            <div class="photo-box"><img src="13.jpg" alt=""></div>
+            <div class="photo-box"><img src="12.jpg" alt=""></div>
+            <div class="photo-box"><img src="11.jpg" alt=""></div>
+            <div class="photo-box"><img src="10.jpg" alt=""></div>
+            <div class="photo-box"><img src="9.jpg" alt=""></div>
+            <div class="photo-box"><img src="8.jpg" alt=""></div>
+            <div class="photo-box"><img src="7.jpg" alt=""></div>
+            <div class="photo-box"><img src="6.jpg" alt=""></div>
+            <div class="photo-box"><img src="5.jpg" alt=""></div>
+            <div class="photo-box"><img src="4.jpg" alt=""></div>
+            <div class="photo-box"><img src="3.jpg" alt=""></div>
+            <div class="photo-box"><img src="2.jpg" alt=""></div>
+            <div class="photo-box"><img src="1.jpg" alt=""></div>
+            <div class="photo-box"><img src="7.jpg" alt=""></div>
+        </div>
+    </div>
+
+    <script>
+
+        new RowPhoto({
+            "container" : ".photo-container",
+            "box" : ".photo-box",
+        });
+
+    </script>
+</body>
+</html>

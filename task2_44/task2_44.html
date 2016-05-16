@@ -4,26 +4,31 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<style>
+	*{
+		padding: 0;
+		margin: 0;
+	}
 	.button-wrapper{
 		position: relative;
 		margin: auto;
 		text-align: center;
-		top:20px;
 		height: 60px;
 		vertical-align: middle;
+		top: 20px;
 	}
 	.body-wrapper{
 		width: 70%;
 		overflow: auto;
 		margin: auto;
 		border: 1px solid red;
+		margin-top: 20px;
 	}
 
 	.waterfall-container{
 		width: 100%;
+		position: relative;
 		height: auto;
 		overflow: auto;
-		top:120px;
 	}
 
 	.waterfall-column{
@@ -126,9 +131,8 @@
   			var color = ['4C6EB4', 'D25064', 'E59649','00AAAA','99FF33','FFB6C1','FFB3FF' ];
 
   			var i = 7;
-  			function add(){
+  			function add(waterfall){
   				var a = parseInt(Math.random() * (size.length-1));
-				console.log(a + "a");
 				var srcSize = size[a];
 				var b = parseInt(Math.random() * (color.length-1));
 				var srcColor = color[b];
@@ -136,19 +140,27 @@
 				waterfall.addBox(true,src,i++);
   			}
 
-			addBox.onclick = add;
+			addBox.onclick = function(){
+				add(waterfall);
+			}
+
 
 			window.onscroll = function(){
-				var scroll = (document.documentElement.scrollTop ||  document.body.scrollTop)+(document.documentElement.clientHeight || document.body.clientHeight);
-				console.log(scroll + "scroll");
-				var containerHeight = waterfall.getContainerHeight();
-				console.log(containerHeight + "containerHeight");
-				if(scroll > containerHeight){
-					add();
+				//页面上面的文档高度
+				var scroll = (document.documentElement.scrollTop || document.body.scrollTop)+(document.documentElement.clientHeight || document.body.clientHeight);
+				/*console.log(scroll + "scroll");*/
+				//页面的最大高度
+				var containerHeight = document.body.scrollHeight;
+				/*console.log(containerHeight + "containerHeight");*/
+				if(scroll >= (containerHeight-2)){
+					while(waterfall.getContinue()){
+						console.log(11111111);
+						add(waterfall);
+						break;
+					}
 				}
 			}
 
-		
 	</script>
 </body>
 </html>

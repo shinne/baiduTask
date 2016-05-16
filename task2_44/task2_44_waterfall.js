@@ -63,11 +63,12 @@ Waterfall.prototype = {
 	
 	/**
 	 * [addBox 在最矮的column元素里面添加图片]
-	 * @param {[type]} addNew      [true表示只是添加一个box,false表示页面的所有box添加进来]
-	 * @param {[type]} imgSrc      [图片的src]
-	 * @param {[type]} description [图片的描述description]
+	 * @param {[boolean]} addNew      [true表示只是添加一个box,false表示页面的所有box添加进来]
+	 * @param {[string]} imgSrc      [图片的src]
+	 * @param {[string]} description [图片的描述description]
 	 */
 	addBox:function(addNew,imgSrc,description){
+		this.continue = false;
 		if(addNew){
 			var index = this.getMinHeightColumnIndex();
 			var img = document.createElement("img");
@@ -86,7 +87,11 @@ Waterfall.prototype = {
 				this.columns[index].appendChild(this.box[i]);
 			}
 		}
-		
+		this.continue = true;	
+	},
+
+	getContinue:function(){
+		return this.continue;
 	},
 
 
@@ -113,20 +118,4 @@ Waterfall.prototype = {
 	getColumn:function(){
 		return this.column;
 	},
-
-	getContainerHeight:function(){
-		return this.container.offsetHeight + this.container.offsetTop;
-	}
 }
-
-/*
-			 var size = ['660x250', '300x400', '350x500', '200x320', '300x300'];
-  			 var color = [ 'E97452', '4C6EB4', '449F93', 'D25064', 'E59649' ];
-
-			addBox.onclick = function(){
-				var srcSize = size[Math.random() * size.length];
-				var srcColor = size[Math.random() * color.length];
-				console.log(srcSize + srcColor);
-				waterfall.addBox(true,)
-			}
-*/

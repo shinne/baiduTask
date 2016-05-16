@@ -1,0 +1,18 @@
+.photo-container{
+        width: 100%;
+    }
+
+    .photo-row{
+        overflow: hidden; 
+    }
+
+    .photo-box{
+        display: inline-block;
+        overflow: hidden;
+    }
+
+    .photo-box img{
+        height: 100%;
+        width: auto;
+
+    }

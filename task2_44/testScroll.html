@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	*{
+		padding: 0;
+		margin: 0;
+	}
+	.body-wrapper{
+		position: relative;
+		top: 200px;
+		height: 800px;
+		width: 100%;
+		border: 1px solid red;
+	}
+
+	</style>
+</head>
+<body>
+	<div class="body-wrapper"></div>
+	<script>
+		window.onscroll = function(){
+			var a = document.documentElement.scrollTop ||  document.body.scrollTop;
+			var b = document.documentElement.clientHeight || document.body.clientHeight
+			console.log("scroll:" + a);
+			console.log("window:" + b);
+		}
+	</script>
+</body>
+</html>
